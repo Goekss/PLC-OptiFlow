@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "OptiCHmiApp.Grpc";
+
+package plc;
+
+// Service zum Lesen von Daten aus der PLC.
+// PLC'den veri okumak için servis.
+service Plc {
+  // Liest den aktuellen Temperaturwert.
+  // Güncel sıcaklık değerini okur.
+  rpc LeseTemperatur (LeseTemperaturRequest) returns (LeseTemperaturReply);
+}
+
+// Anfrage-Nachricht (aktuell leer).
+// İstek mesajı (şimdilik boş).
+message LeseTemperaturRequest {
+}
+
+// Antwort-Nachricht: enthält den Temperaturwert.
+// Yanıt mesajı: sıcaklık değerini içerir.
+message LeseTemperaturReply {
+  int32 temperatur = 1;
+}

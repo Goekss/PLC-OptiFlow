@@ -1,0 +1,22 @@
+<Application x:Class="OptiCHmiApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:OptiCHmiApp"
+             xmlns:vm="clr-namespace:OptiCHmiApp.ViewModels"
+             xmlns:views="clr-namespace:OptiCHmiApp.Views"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type vm:UebersichtViewModel}">
+            <views:UebersichtView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AlarmViewModel}">
+            <views:AlarmView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HandbetriebViewModel}">
+            <views:HandbetriebView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:EinstellungenViewModel}">
+            <views:EinstellungenView/>
+        </DataTemplate>
+    </Application.Resources>
+</Application>

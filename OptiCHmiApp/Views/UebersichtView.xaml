@@ -1,0 +1,9 @@
+<UserControl x:Class="OptiCHmiApp.Views.UebersichtView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel VerticalAlignment="Center">
+        <TextBlock Text="PLC Temperaturwert:" FontSize="16"/>
+        <TextBlock Text="{Binding Temperatur}" FontSize="42" FontWeight="Bold" Margin="0,5,0,20"/>
+        <Button Content="Lesen" Command="{Binding LeseCommand}" Padding="24,10" FontSize="14" HorizontalAlignment="Left"/>
+    </StackPanel>
+</UserControl>

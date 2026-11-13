@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="OptiCHmiApp.Backend/OptiCHmiApp.Backend.csproj" />
+  <Project Path="OptiCHmiApp.Tests/OptiCHmiApp.Tests.csproj" />
+  <Project Path="OptiCHmiApp/OptiCHmiApp.csproj" />
+</Solution>

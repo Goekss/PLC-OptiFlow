@@ -1,0 +1,9 @@
+<UserControl x:Class="OptiCHmiApp.Views.AlarmView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <TextBlock Text="Alarme — wird im nächsten Schritt ergänzt."
+               FontSize="18"
+               Foreground="Gray"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"/>
+</UserControl>
