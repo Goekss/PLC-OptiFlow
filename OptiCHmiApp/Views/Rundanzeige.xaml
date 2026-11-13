@@ -1,0 +1,55 @@
+<UserControl x:Class="OptiCHmiApp.Views.Rundanzeige"
+             x:Name="Wurzel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="220" Height="220">
+    <Viewbox>
+        <Grid Width="220" Height="220">
+            <!-- Renkli halka (skala) -->
+            <Ellipse Margin="12" StrokeThickness="14">
+                <Ellipse.Stroke>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Color="#2ECC71" Offset="0"/>
+                        <GradientStop Color="#F1C40F" Offset="0.5"/>
+                        <GradientStop Color="#E74C3C" Offset="1"/>
+                    </LinearGradientBrush>
+                </Ellipse.Stroke>
+            </Ellipse>
+
+            <!-- İç yüz -->
+            <Ellipse Margin="24" Fill="{DynamicResource Karte}"/>
+
+            <!-- İbre (iğne) -->
+            <Grid RenderTransformOrigin="0.5,0.5">
+                <Grid.RenderTransform>
+                    <RotateTransform x:Name="NadelRotation" Angle="-90"/>
+                </Grid.RenderTransform>
+                <Rectangle Width="6" Height="82" Fill="{DynamicResource TextPrimaer}" RadiusX="3" RadiusY="3"
+                           VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,28,0,0">
+                    <Rectangle.Effect>
+                        <DropShadowEffect Color="#22D3EE" BlurRadius="12" ShadowDepth="0"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+            </Grid>
+
+            <!-- Merkez pimi -->
+            <Ellipse Width="22" Height="22" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#FFFFFF" Offset="0"/>
+                        <GradientStop Color="#22D3EE" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+
+            <!-- Değer -->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,44">
+                <TextBlock Text="{Binding Wert, ElementName=Wurzel}" FontSize="22" FontWeight="Bold"
+                           Foreground="{DynamicResource TextPrimaer}"/>
+                <TextBlock Text="°C" FontSize="13" Foreground="{DynamicResource TextSekundaer}"
+                           VerticalAlignment="Bottom" Margin="3,0,0,4"/>
+            </StackPanel>
+        </Grid>
+    </Viewbox>
+</UserControl>

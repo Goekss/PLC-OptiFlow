@@ -10,7 +10,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        IPlcService plcService = new GrpcPlcService("http://localhost:5262");
+        IPlcService plcService = new GrpcPlcService(BenutzerEinstellungen.BackendAdresse);
         DataContext = new HauptViewModel(plcService);
     }
 }

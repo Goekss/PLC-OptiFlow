@@ -1,9 +1,38 @@
 <UserControl x:Class="OptiCHmiApp.Views.EinstellungenView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <TextBlock Text="Einstellungen — wird im nächsten Schritt ergänzt."
-               FontSize="18"
-               Foreground="Gray"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"/>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <!-- Verbindung -->
+            <TextBlock Text="VERBINDUNG" Style="{StaticResource AbschnittTitelStil}"/>
+            <Border Style="{StaticResource KarteStil}" Margin="0,10,0,16">
+                <StackPanel>
+                    <TextBlock Text="Backend-Adresse" FontSize="13" Foreground="{DynamicResource TextSekundaer}"/>
+                    <TextBox Style="{StaticResource TexteingabeStil}" Margin="0,8,0,0"
+                             Text="{Binding BackendAdresse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Abfrageintervall (ms)" FontSize="13" Margin="0,16,0,0"
+                               Foreground="{DynamicResource TextSekundaer}"/>
+                    <TextBox Style="{StaticResource TexteingabeStil}" Margin="0,8,0,0"
+                             Text="{Binding AbfrageIntervallMs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Darstellung -->
+            <TextBlock Text="DARSTELLUNG" Style="{StaticResource AbschnittTitelStil}"/>
+            <Border Style="{StaticResource KarteStil}" Margin="0,10,0,16">
+                <CheckBox Style="{StaticResource UmschalterStil}" IsChecked="{Binding IstDunkel, Mode=TwoWay}">
+                    <TextBlock Text="Dunkles Design" FontSize="14" Foreground="{DynamicResource TextPrimaer}"/>
+                </CheckBox>
+            </Border>
+
+            <!-- Speichern -->
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Speichern" Command="{Binding SpeichernCommand}"
+                        Style="{StaticResource PrimaerButtonStil}"/>
+                <TextBlock Text="{Binding SpeicherStatus}" Margin="14,0,0,0" VerticalAlignment="Center"
+                           Foreground="{DynamicResource Erfolg}" FontSize="13"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

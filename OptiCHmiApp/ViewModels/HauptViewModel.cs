@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OptiCHmiApp.Services;
+using OptiCHmiApp.Themes;
 
 namespace OptiCHmiApp.ViewModels;
 
@@ -30,6 +32,14 @@ public class HauptViewModel : ObservableObject
         set => SetProperty(ref _aktuelleSeite, value);
     }
 
+    public string ThemeIcon => ThemeManager.AktuellesTheme == ThemeManager.Dunkel ? "☀" : "🌙";
+
+    public string ThemeTooltip => ThemeManager.AktuellesTheme == ThemeManager.Dunkel
+        ? "Zum hellen Design wechseln"
+        : "Zum dunklen Design wechseln";
+
+    public IRelayCommand ThemeUmschaltenCommand { get; }
+
     public HauptViewModel(IPlcService plcService)
     {
         Menue = new List<MenueEintrag>
@@ -40,6 +50,15 @@ public class HauptViewModel : ObservableObject
             new("Einstellungen", new EinstellungenViewModel())
         };
 
+        ThemeUmschaltenCommand = new RelayCommand(ThemeManager.Umschalten);
+        ThemeManager.ThemeGeaendert += OnThemeGeaendert;
+
         AusgewaehlterEintrag = Menue[0];
+    }
+
+    private void OnThemeGeaendert(string thema)
+    {
+        OnPropertyChanged(nameof(ThemeIcon));
+        OnPropertyChanged(nameof(ThemeTooltip));
     }
 }

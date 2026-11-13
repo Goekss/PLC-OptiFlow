@@ -1,14 +1,18 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
+using OptiCHmiApp.Services;
+using OptiCHmiApp.Themes;
 
-namespace OptiCHmiApp
+namespace OptiCHmiApp;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    protected override void OnStartup(StartupEventArgs e)
     {
+        BenutzerEinstellungen.Laden();
+        ThemeManager.Initialisieren();
+        base.OnStartup(e);
     }
-
 }

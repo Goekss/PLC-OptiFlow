@@ -13,12 +13,20 @@ public class UebersichtViewModelTests
     }
 
     [Fact]
-    public async Task LeseCommand_AktualisiertTemperatur()
+    public async Task Start_StopptNachStopp_AktualisiertTemperatur()
     {
         var viewModel = new UebersichtViewModel(new KonstanterPlcService());
 
-        await viewModel.LeseCommand.ExecuteAsync(null);
+        var startTask = viewModel.StartStoppCommand.ExecuteAsync(null);
 
+        await Task.Delay(650);
+
+        Assert.True(viewModel.Laeuft);
         Assert.Equal(42, viewModel.Temperatur);
+
+        await viewModel.StartStoppCommand.ExecuteAsync(null);
+        await startTask;
+
+        Assert.False(viewModel.Laeuft);
     }
 }

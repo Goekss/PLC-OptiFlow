@@ -1,9 +1,119 @@
 <UserControl x:Class="OptiCHmiApp.Views.AlarmView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <TextBlock Text="Alarme — wird im nächsten Schritt ergänzt."
-               FontSize="18"
-               Foreground="Gray"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"/>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Kopfzeile -->
+        <DockPanel Grid.Row="0">
+            <Button DockPanel.Dock="Right" Content="Alle quittieren"
+                    Command="{Binding AlleQuittierenCommand}"
+                    Style="{StaticResource SekundaerButtonStil}"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="ALARME" Style="{StaticResource AbschnittTitelStil}"/>
+                <Border Background="{DynamicResource Gefahr}" CornerRadius="10" Padding="8,3" Margin="12,0,0,0">
+                    <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#FFFFFF">
+                        <Run Text="AKTIV: "/><Run Text="{Binding AktiveAnzahl, Mode=OneWay}"/>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Liste -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,16,0,0">
+            <ItemsControl ItemsSource="{Binding Alarme}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource KarteStil}" Padding="16" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Schweregrad-Leiste -->
+                                <Border Grid.Column="0" Width="4" CornerRadius="2" Margin="-16,0,0,0">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="{DynamicResource Info}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Schweregrad}" Value="Warnung">
+                                                    <Setter Property="Background" Value="{DynamicResource Warnung}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Schweregrad}" Value="Kritisch">
+                                                    <Setter Property="Background" Value="{DynamicResource Gefahr}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+
+                                <!-- Schweregrad-Punkt -->
+                                <Ellipse Grid.Column="1" Width="10" Height="10" Margin="18,0,14,0" VerticalAlignment="Center">
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Setter Property="Fill" Value="{DynamicResource Info}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Schweregrad}" Value="Warnung">
+                                                    <Setter Property="Fill" Value="{DynamicResource Warnung}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Schweregrad}" Value="Kritisch">
+                                                    <Setter Property="Fill" Value="{DynamicResource Gefahr}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Meldung}" FontSize="15" FontWeight="SemiBold"
+                                               Foreground="{DynamicResource TextPrimaer}"/>
+                                    <TextBlock Text="{Binding Bereich}" FontSize="12" Margin="0,3,0,0"
+                                               Foreground="{DynamicResource TextSekundaer}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" Margin="16,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Right">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="AKTIV"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource Gefahr}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IstQuittiert}" Value="True">
+                                                        <Setter Property="Text" Value="QUITTIERT"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource Erfolg}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Zeit}" FontSize="12" HorizontalAlignment="Right"
+                                               Margin="0,6,0,0" Foreground="{DynamicResource TextSekundaer}"/>
+                                    <Button Content="Quittieren" Margin="0,10,0,0" Padding="14,6" FontSize="12"
+                                            Command="{Binding DataContext.QuittierenCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource PrimaerButtonStil}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IstQuittiert}" Value="True">
+                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
 </UserControl>
