@@ -80,10 +80,10 @@ public class HandbetriebViewModel : ObservableObject
     }
 
     public string StatusText => Notaus
-        ? "NOTAUS"
-        : (PumpeEin || HeizungEin) ? "ANLAGE IN BETRIEB" : "BEREITSCHAFT";
+        ? Sprache.Text("Notaus")
+        : (PumpeEin || HeizungEin) ? Sprache.Text("AnlageInBetrieb") : Sprache.Text("Bereitschaft");
 
-    public string NotausText => Notaus ? "RESET" : "NOT-AUS";
+    public string NotausText => Sprache.Text(Notaus ? "Reset" : "NotAus");
 
     public IAsyncRelayCommand NotausCommand { get; }
 
@@ -91,6 +91,7 @@ public class HandbetriebViewModel : ObservableObject
     {
         _plcService = plcService;
         NotausCommand = new AsyncRelayCommand(NotausUmschaltenAsync);
+        Sprache.SpracheGeaendert += _ => OnPropertyChanged(string.Empty);
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _timer.Tick += (_, _) => _ = SynchronisiereAsync();

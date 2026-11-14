@@ -5,12 +5,34 @@ using OptiCHmiApp.Themes;
 
 namespace OptiCHmiApp.ViewModels;
 
+// Eine auswählbare Sprache in den Einstellungen.
+// Ayarlarda seçilebilir bir dil.
+public sealed class SprachEintrag : ObservableObject
+{
+    private bool _istAktiv;
+
+    public string Code { get; }
+    public string Name { get; }
+
+    public bool IstAktiv
+    {
+        get => _istAktiv;
+        set => SetProperty(ref _istAktiv, value);
+    }
+
+    public SprachEintrag(string code, string name)
+    {
+        Code = code;
+        Name = name;
+    }
+}
+
 // ViewModel der Seite "Einstellungen".
 public class EinstellungenViewModel : ObservableObject
 {
     private string _backendAdresse;
     private int _abfrageIntervallMs;
-    private string _speicherStatus = string.Empty;
+    private bool _zeigeSpeicherStatus;
 
     public string BackendAdresse
     {
@@ -30,21 +52,49 @@ public class EinstellungenViewModel : ObservableObject
         set => ThemeManager.Anwenden(value ? ThemeManager.Dunkel : ThemeManager.Hell);
     }
 
-    public string SpeicherStatus
-    {
-        get => _speicherStatus;
-        private set => SetProperty(ref _speicherStatus, value);
-    }
+    public string SpeicherStatus => _zeigeSpeicherStatus ? Sprache.Text("Gespeichert") : string.Empty;
+
+    public IReadOnlyList<SprachEintrag> Sprachen { get; }
 
     public IAsyncRelayCommand SpeichernCommand { get; }
+
+    public IRelayCommand<SprachEintrag> SpracheWaehlenCommand { get; }
 
     public EinstellungenViewModel()
     {
         _backendAdresse = BenutzerEinstellungen.BackendAdresse;
         _abfrageIntervallMs = BenutzerEinstellungen.AbfrageIntervallMs;
 
+        Sprachen = new List<SprachEintrag>
+        {
+            new(Sprache.Deutsch, "Deutsch"),
+            new(Sprache.Englisch, "English"),
+            new(Sprache.Italienisch, "Italiano"),
+            new(Sprache.Franzoesisch, "Français"),
+            new(Sprache.Tuerkisch, "Türkçe")
+        };
+
+        foreach (var eintrag in Sprachen)
+        {
+            eintrag.IstAktiv = eintrag.Code == Sprache.Aktuell;
+        }
+
         SpeichernCommand = new AsyncRelayCommand(SpeichernAsync);
+        SpracheWaehlenCommand = new RelayCommand<SprachEintrag>(SpracheWaehlen);
         ThemeManager.ThemeGeaendert += OnThemeGeaendert;
+        Sprache.SpracheGeaendert += OnSpracheGeaendert;
+    }
+
+    private void SpracheWaehlen(SprachEintrag? eintrag)
+    {
+        if (eintrag is null)
+        {
+            return;
+        }
+
+        Sprache.Anwenden(eintrag.Code);
+        BenutzerEinstellungen.Sprache = eintrag.Code;
+        BenutzerEinstellungen.Speichern();
     }
 
     private async Task SpeichernAsync()
@@ -58,13 +108,25 @@ public class EinstellungenViewModel : ObservableObject
         BenutzerEinstellungen.AbfrageIntervallMs = AbfrageIntervallMs;
         BenutzerEinstellungen.Speichern();
 
-        SpeicherStatus = "Einstellungen gespeichert.";
+        _zeigeSpeicherStatus = true;
+        OnPropertyChanged(nameof(SpeicherStatus));
         await Task.Delay(2000);
-        SpeicherStatus = string.Empty;
+        _zeigeSpeicherStatus = false;
+        OnPropertyChanged(nameof(SpeicherStatus));
     }
 
     private void OnThemeGeaendert(string thema)
     {
         OnPropertyChanged(nameof(IstDunkel));
+    }
+
+    private void OnSpracheGeaendert(string sprache)
+    {
+        foreach (var eintrag in Sprachen)
+        {
+            eintrag.IstAktiv = eintrag.Code == sprache;
+        }
+
+        OnPropertyChanged(nameof(SpeicherStatus));
     }
 }

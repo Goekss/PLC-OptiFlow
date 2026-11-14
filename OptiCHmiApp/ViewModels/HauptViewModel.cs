@@ -34,31 +34,52 @@ public class HauptViewModel : ObservableObject
 
     public string ThemeIcon => ThemeManager.AktuellesTheme == ThemeManager.Dunkel ? "☀" : "🌙";
 
-    public string ThemeTooltip => ThemeManager.AktuellesTheme == ThemeManager.Dunkel
-        ? "Zum hellen Design wechseln"
-        : "Zum dunklen Design wechseln";
+    public string ThemeTooltip => Sprache.Text(ThemeManager.AktuellesTheme == ThemeManager.Dunkel
+        ? "ThemeTooltipZuHell"
+        : "ThemeTooltipZuDunkel");
 
     public IRelayCommand ThemeUmschaltenCommand { get; }
 
+    public IRelayCommand AlarmeAnzeigenCommand { get; }
+
+    public AnlagenStatusViewModel Status { get; }
+
     public HauptViewModel(IPlcService plcService)
     {
+        Status = new AnlagenStatusViewModel(plcService);
+
         Menue = new List<MenueEintrag>
         {
-            new("Übersicht", new UebersichtViewModel(plcService)),
-            new("Alarme", new AlarmViewModel(plcService)),
-            new("Handbetrieb", new HandbetriebViewModel(plcService)),
-            new("Einstellungen", new EinstellungenViewModel())
+            new("MenueUebersicht", new UebersichtViewModel(plcService)),
+            new("MenueAlarme", new AlarmViewModel(plcService)),
+            new("MenueHandbetrieb", new HandbetriebViewModel(plcService)),
+            new("MenueEinstellungen", new EinstellungenViewModel())
         };
 
         ThemeUmschaltenCommand = new RelayCommand(ThemeManager.Umschalten);
+        AlarmeAnzeigenCommand = new RelayCommand(AlarmeAnzeigen);
         ThemeManager.ThemeGeaendert += OnThemeGeaendert;
+        Sprache.SpracheGeaendert += OnSpracheGeaendert;
 
         AusgewaehlterEintrag = Menue[0];
     }
 
+    // Die Alarmseite ist der zweite Menüeintrag.
+    private void AlarmeAnzeigen() => AusgewaehlterEintrag = Menue[1];
+
     private void OnThemeGeaendert(string thema)
     {
         OnPropertyChanged(nameof(ThemeIcon));
+        OnPropertyChanged(nameof(ThemeTooltip));
+    }
+
+    private void OnSpracheGeaendert(string sprache)
+    {
+        foreach (var eintrag in Menue)
+        {
+            eintrag.Aktualisieren();
+        }
+
         OnPropertyChanged(nameof(ThemeTooltip));
     }
 }

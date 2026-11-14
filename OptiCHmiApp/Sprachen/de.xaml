@@ -1,0 +1,84 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- Navigation -->
+    <sys:String x:Key="MenueTitel">MENÜ</sys:String>
+    <sys:String x:Key="MenueUebersicht">Übersicht</sys:String>
+    <sys:String x:Key="MenueAlarme">Alarme</sys:String>
+    <sys:String x:Key="MenueHandbetrieb">Handbetrieb</sys:String>
+    <sys:String x:Key="MenueEinstellungen">Einstellungen</sys:String>
+    <sys:String x:Key="AppUntertitel">HMI DASHBOARD</sys:String>
+
+    <!-- Design -->
+    <sys:String x:Key="ThemeTooltipZuHell">Zum hellen Design wechseln</sys:String>
+    <sys:String x:Key="ThemeTooltipZuDunkel">Zum dunklen Design wechseln</sys:String>
+
+    <!-- Übersicht -->
+    <sys:String x:Key="TemperaturTitel">PLC TEMPERATUR</sys:String>
+    <sys:String x:Key="VerlaufTitel">TEMPERATURVERLAUF</sys:String>
+    <sys:String x:Key="Live">LIVE</sys:String>
+    <sys:String x:Key="Simulation">SIMULATION</sys:String>
+    <sys:String x:Key="LetzteAntwort">Letzte Antwort:</sys:String>
+    <sys:String x:Key="Start">Start</sys:String>
+    <sys:String x:Key="Stopp">Stopp</sys:String>
+    <sys:String x:Key="Heizung">Heizung</sys:String>
+    <sys:String x:Key="Pumpe">Pumpe</sys:String>
+    <sys:String x:Key="Sollwert">Sollwert</sys:String>
+    <sys:String x:Key="Ein">EIN</sys:String>
+    <sys:String x:Key="Aus">AUS</sys:String>
+    <sys:String x:Key="Verbunden">VERBUNDEN</sys:String>
+    <sys:String x:Key="Getrennt">GETRENNT</sys:String>
+    <sys:String x:Key="Laeuft">LÄUFT</sys:String>
+    <sys:String x:Key="Gestoppt">GESTOPPT</sys:String>
+    <sys:String x:Key="Notaus">NOTAUS</sys:String>
+    <sys:String x:Key="AlarmAnzahl">{0} ALARM</sys:String>
+    <sys:String x:Key="KeineAlarme">0 ALARME</sys:String>
+    <sys:String x:Key="ZielErreicht">ZIEL ERREICHT: </sys:String>
+    <sys:String x:Key="AutomatikGestoppt">AUTOMATIK GESTOPPT</sys:String>
+
+    <!-- Handbetrieb -->
+    <sys:String x:Key="HandbetriebTitel">HANDBETRIEB</sys:String>
+    <sys:String x:Key="PumpeBeschreibung">Kühlmittelkreislauf</sys:String>
+    <sys:String x:Key="HeizungBeschreibung">Heizkreislauf</sys:String>
+    <sys:String x:Key="NotAus">NOT-AUS</sys:String>
+    <sys:String x:Key="Reset">RESET</sys:String>
+    <sys:String x:Key="Bereitschaft">BEREITSCHAFT</sys:String>
+    <sys:String x:Key="AnlageInBetrieb">ANLAGE IN BETRIEB</sys:String>
+
+    <!-- Alarme -->
+    <sys:String x:Key="AlarmTitel">ALARME</sys:String>
+    <sys:String x:Key="AlleQuittieren">Alle quittieren</sys:String>
+    <sys:String x:Key="Aktiv">AKTIV</sys:String>
+    <sys:String x:Key="Quittiert">QUITTIERT</sys:String>
+    <sys:String x:Key="Quittieren">Quittieren</sys:String>
+    <sys:String x:Key="AlarmAktiv">AKTIV: </sys:String>
+    <sys:String x:Key="AlarmTempKritisch">Temperatur kritisch hoch</sys:String>
+    <sys:String x:Key="AlarmTempWarnung">Temperatur zu hoch</sys:String>
+    <sys:String x:Key="AlarmSollwertErreicht">Sollwert erreicht</sys:String>
+    <sys:String x:Key="AlarmVerbindungGetrennt">Verbindung getrennt (Simulation)</sys:String>
+    <sys:String x:Key="BereichKessel">Kessel</sys:String>
+    <sys:String x:Key="BereichKommunikation">Kommunikation</sys:String>
+
+    <!-- Einstellungen -->
+    <sys:String x:Key="VerbindungTitel">VERBINDUNG</sys:String>
+    <sys:String x:Key="BackendAdresse">Backend-Adresse</sys:String>
+    <sys:String x:Key="BackendAdresseHinweis">Die Adresse wird beim Start gelesen – Änderungen greifen nach einem Neustart des Clients.</sys:String>
+    <sys:String x:Key="AbfrageIntervall">Abfrageintervall (ms)</sys:String>
+    <sys:String x:Key="DarstellungTitel">DARSTELLUNG</sys:String>
+    <sys:String x:Key="DunklesDesign">Dunkles Design</sys:String>
+    <sys:String x:Key="SpracheTitel">SPRACHE</sys:String>
+    <sys:String x:Key="Speichern">Speichern</sys:String>
+    <sys:String x:Key="Gespeichert">Einstellungen gespeichert.</sys:String>
+
+    <!-- Prozessschema / Kennzahlen -->
+    <sys:String x:Key="Prozessschema">PROZESSSCHEMA</sys:String>
+    <sys:String x:Key="Temperatur">Temperatur</sys:String>
+    <sys:String x:Key="Vorlauf">Vorlauf</sys:String>
+    <sys:String x:Key="Ruecklauf">Rücklauf</sys:String>
+    <sys:String x:Key="Grenzwerte">Grenzwerte</sys:String>
+    <sys:String x:Key="Zeitfenster">Zeitfenster</sys:String>
+    <sys:String x:Key="MinuteKurz">min</sys:String>
+    <sys:String x:Key="LetzteAktualisierung">Letzte Aktualisierung</sys:String>
+    <sys:String x:Key="AlarmeAnzeigen">Alarme anzeigen</sys:String>
+</ResourceDictionary>

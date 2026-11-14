@@ -1,417 +1,513 @@
-﻿<UserControl x:Class="OptiCHmiApp.Views.UebersichtView"
+<UserControl x:Class="OptiCHmiApp.Views.UebersichtView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:OptiCHmiApp.Views">
 
     <UserControl.Resources>
-        <Style x:Key="AktionsButton" TargetType="Button">
-            <Setter Property="Background" Value="{DynamicResource Akzent}"/>
-            <Setter Property="Foreground" Value="{DynamicResource AkzentKontrast}"/>
-            <Setter Property="FontSize" Value="14"/>
+        <BooleanToVisibilityConverter x:Key="BoolZuSichtbarkeit"/>
+
+        <Style x:Key="KpiTitel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
-                                CornerRadius="8" Padding="28,10">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.7"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.4"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Laeuft}" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource Gefahr}"/>
-                    <Setter Property="Foreground" Value="#FFFFFF"/>
-                </DataTrigger>
-            </Style.Triggers>
+            <Setter Property="Foreground" Value="{DynamicResource TextSekundaer}"/>
+        </Style>
+
+        <Style x:Key="KpiWert" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaer}"/>
+            <Setter Property="Typography.NumeralAlignment" Value="Tabular"/>
+        </Style>
+
+        <Style x:Key="KpiHinweis" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSekundaer}"/>
+            <Setter Property="Margin" Value="0,2,0,0"/>
+        </Style>
+
+        <Style x:Key="FensterButton" TargetType="Button" BasedOn="{StaticResource SekundaerButtonStil}">
+            <Setter Property="Padding" Value="8,3"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+        </Style>
+
+        <Style x:Key="ZustandsPunkt" TargetType="Ellipse">
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Fill" Value="{DynamicResource SchalterAus}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Statusleiste -->
-        <Border Grid.Row="0" Style="{StaticResource KarteStil}" Padding="14">
-            <StackPanel Orientation="Horizontal">
-
-                <!-- Maschinenname -->
-                <Border CornerRadius="10" Padding="10,5" Margin="0,0,10,0" Background="{DynamicResource SchalterAus}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🏭" FontSize="11" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding MaschinenName}" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
-                    </StackPanel>
+        <!-- Kopfzeile der Seite -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,12">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border CornerRadius="4" Padding="8,3" Margin="0,0,8,0"
+                        Background="{DynamicResource AkzentSoft}"
+                        Visibility="{Binding ZielAlarmAktiv, Converter={StaticResource BoolZuSichtbarkeit}}">
+                    <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource Warnung}">
+                        <Run Text="{DynamicResource ZielErreicht}"/><Run Text="{Binding ZielAlarmAnzeige, Mode=OneWay}"/><Run Text=" s"/>
+                    </TextBlock>
                 </Border>
 
-                <!-- IP -->
-                <Border CornerRadius="10" Padding="10,5" Margin="0,0,10,0" Background="{DynamicResource SchalterAus}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="🌐" FontSize="11" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding IpAdresse}" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
-                    </StackPanel>
+                <Border CornerRadius="4" Padding="8,3" Margin="0,0,10,0"
+                        Background="{DynamicResource Erfolg}"
+                        Visibility="{Binding AutoGestoppt, Converter={StaticResource BoolZuSichtbarkeit}}">
+                    <TextBlock Text="{DynamicResource AutomatikGestoppt}" FontSize="10" FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextInvertiert}"/>
                 </Border>
 
-                <!-- Verbindung -->
-                <Border CornerRadius="10" Padding="10,5" Margin="0,0,10,0" Background="{DynamicResource SchalterAus}">
-                    <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="8" Height="8" VerticalAlignment="Center">
+                <Button Content="{Binding StartStoppText}" Command="{Binding StartStoppCommand}"
+                        AutomationProperties.Name="StartStopp" Padding="18,7" FontSize="12"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="{DynamicResource MenueUebersicht}" FontSize="16" FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextPrimaer}"/>
+                <TextBlock Margin="14,0,0,0" FontSize="11" VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextSekundaer}">
+                    <Run Text="{DynamicResource LetzteAntwort}"/>
+                    <Run Text=" "/>
+                    <Run Text="{Binding LetzteAntwortMs, Mode=OneWay}"/>
+                    <Run Text=" ms"/>
+                </TextBlock>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Kennzahlen -->
+        <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,12">
+            <!-- Temperatur -->
+            <Border Style="{StaticResource KarteStil}" Padding="12" Margin="0,0,10,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="{DynamicResource Temperatur}" Style="{StaticResource KpiTitel}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                            <TextBlock Text="{Binding Temperatur, StringFormat={}{0:F1}}" FontSize="24"
+                                       FontWeight="SemiBold" Typography.NumeralAlignment="Tabular">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{DynamicResource TextPrimaer}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding WarnungAktiv}" Value="True">
+                                                <Setter Property="Foreground" Value="{DynamicResource Warnung}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding KritischAktiv}" Value="True">
+                                                <Setter Property="Foreground" Value="{DynamicResource Gefahr}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Text="°C" FontSize="11" VerticalAlignment="Bottom" Margin="2,0,0,4"
+                                       Foreground="{DynamicResource TextSekundaer}"/>
+                        </StackPanel>
+                        <TextBlock Text="80 / 90 °C" Style="{StaticResource KpiHinweis}"/>
+                    </StackPanel>
+
+                    <Viewbox Grid.Column="1" Width="86" Height="47" Stretch="Uniform">
+                        <views:Rundanzeige Wert="{Binding Temperatur}" Width="220" Height="120"/>
+                    </Viewbox>
+                </Grid>
+            </Border>
+
+            <!-- Sollwert -->
+            <Border Style="{StaticResource KarteStil}" Padding="12" Margin="0,0,10,0">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{DynamicResource Sollwert}" Style="{StaticResource KpiTitel}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <TextBlock Text="{Binding Sollwert, StringFormat={}{0:F0}}" Style="{StaticResource KpiWert}"/>
+                        <TextBlock Text="°C" FontSize="11" VerticalAlignment="Bottom" Margin="2,0,0,3"
+                                   Foreground="{DynamicResource TextSekundaer}"/>
+                    </StackPanel>
+                    <TextBlock Text="TIC-01" Style="{StaticResource KpiHinweis}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Heizung -->
+            <Border Style="{StaticResource KarteStil}" Padding="12" Margin="0,0,10,0">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{DynamicResource Heizung}" Style="{StaticResource KpiTitel}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                        <Ellipse>
                             <Ellipse.Style>
-                                <Style TargetType="Ellipse">
-                                    <Setter Property="Fill" Value="{DynamicResource Gefahr}"/>
+                                <Style TargetType="Ellipse" BasedOn="{StaticResource ZustandsPunkt}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IstSimulation}" Value="False">
+                                        <DataTrigger Binding="{Binding Heizung}" Value="True">
                                             <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Ellipse.Style>
                         </Ellipse>
-                        <TextBlock Text="{Binding VerbindungText}" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- Maschinenzustand -->
-                <Border CornerRadius="10" Padding="10,5" Margin="0,0,10,0" Background="{DynamicResource SchalterAus}">
-                    <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="8" Height="8" VerticalAlignment="Center">
-                            <Ellipse.Style>
-                                <Style TargetType="Ellipse">
-                                    <Setter Property="Fill" Value="{DynamicResource SchalterAus}"/>
+                        <TextBlock Margin="8,0,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource KpiWert}">
+                                    <Setter Property="Text" Value="{DynamicResource Aus}"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Notaus}" Value="True">
-                                            <Setter Property="Fill" Value="{DynamicResource Gefahr}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Laeuft}" Value="True">
-                                            <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
+                                        <DataTrigger Binding="{Binding Heizung}" Value="True">
+                                            <Setter Property="Text" Value="{DynamicResource Ein}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </Ellipse.Style>
-                        </Ellipse>
-                        <TextBlock Text="{Binding MaschineText}" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- Alarme -->
-                <Border CornerRadius="10" Padding="10,5" Background="{DynamicResource SchalterAus}">
-                    <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="8" Height="8" VerticalAlignment="Center">
-                            <Ellipse.Style>
-                                <Style TargetType="Ellipse">
-                                    <Setter Property="Fill" Value="{DynamicResource Gefahr}"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding AlarmAnzahl}" Value="0">
-                                            <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Ellipse.Style>
-                        </Ellipse>
-                        <TextBlock Text="{Binding AlarmText}" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- Ziel-Alarm / Countdown -->
-                <Border CornerRadius="10" Padding="10,5" Margin="10,0,0,0">
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Setter Property="Background" Value="{DynamicResource SchalterAus}"/>
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ZielAlarmAktiv}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                    <Setter Property="Background" Value="{DynamicResource Gefahr}"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="⏱" FontSize="11" VerticalAlignment="Center"/>
-                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="6,0,0,0">
-                            <Run Text="ZIEL ERREICHT: "/>
-                            <Run Text="{Binding ZielAlarmAnzeige, Mode=OneWay}"/>
-                            <Run Text="s"/>
+                            </TextBlock.Style>
                         </TextBlock>
                     </StackPanel>
-                </Border>
+                    <TextBlock Text="E1" Style="{StaticResource KpiHinweis}"/>
+                </StackPanel>
+            </Border>
 
-                <!-- Automatisch gestoppt -->
-                <Border CornerRadius="10" Padding="10,5" Margin="10,0,0,0">
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Setter Property="Background" Value="{DynamicResource Erfolg}"/>
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding AutoGestoppt}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="✓" FontSize="13" FontWeight="Bold" Foreground="#FFFFFF" VerticalAlignment="Center"/>
-                        <TextBlock Text=" OTOMATIK DURDU" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="#FFFFFF" Margin="4,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Border>
-
-        <!-- Hauptbereich -->
-        <Grid Grid.Row="1" Margin="0,16,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="300"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- Temperaturkarte -->
-            <Border Grid.Column="0" Style="{StaticResource KarteStil}" Margin="0,0,16,0">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="PLC TEMPERATUR" Style="{StaticResource AbschnittTitelStil}"/>
-                        <Border CornerRadius="10" Padding="8,3" Margin="10,0,0,0">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="Background" Value="{DynamicResource AkzentSoft}"/>
+            <!-- Pumpe -->
+            <Border Style="{StaticResource KarteStil}" Padding="12">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{DynamicResource Pumpe}" Style="{StaticResource KpiTitel}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                        <Ellipse>
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse" BasedOn="{StaticResource ZustandsPunkt}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IstSimulation}" Value="True">
-                                            <Setter Property="Background" Value="{DynamicResource SchalterAus}"/>
+                                        <DataTrigger Binding="{Binding Pumpe}" Value="True">
+                                            <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </Border.Style>
-                            <StackPanel Orientation="Horizontal">
-                                <Ellipse Width="7" Height="7" VerticalAlignment="Center">
-                                    <Ellipse.Style>
-                                        <Style TargetType="Ellipse">
-                                            <Setter Property="Fill" Value="{DynamicResource Akzent}"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IstSimulation}" Value="True">
-                                                    <Setter Property="Fill" Value="{DynamicResource Warnung}"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Ellipse.Style>
-                                </Ellipse>
-                                <TextBlock FontSize="10" FontWeight="SemiBold" Margin="5,0,0,0">
+                            </Ellipse.Style>
+                        </Ellipse>
+                        <TextBlock Margin="8,0,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource KpiWert}">
+                                    <Setter Property="Text" Value="{DynamicResource Aus}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Pumpe}" Value="True">
+                                            <Setter Property="Text" Value="{DynamicResource Ein}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                    <TextBlock Text="P1" Style="{StaticResource KpiHinweis}"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <!-- Prozessschema und Verlauf -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="360"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- P&ID -->
+            <Border Grid.Column="0" Style="{StaticResource KarteStil}" Padding="14">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="{DynamicResource Prozessschema}"
+                               Style="{StaticResource AbschnittTitelStil}"/>
+
+                    <Viewbox Stretch="Uniform" Margin="0,8,0,0" VerticalAlignment="Center">
+                        <Canvas Width="400" Height="330">
+                            <!-- Rücklauf -->
+                            <Polyline Points="285,172 285,210 180,210"
+                                      Stroke="{DynamicResource KarteRand}" StrokeThickness="6"
+                                      StrokeLineJoin="Round"/>
+                            <!-- Vorlauf -->
+                            <Polyline Points="180,90 285,90 285,128"
+                                      Stroke="{DynamicResource KarteRand}" StrokeThickness="6"
+                                      StrokeLineJoin="Round"/>
+
+                            <!-- Flussanzeige Vorlauf (nur bei laufender Pumpe) -->
+                            <Polyline Points="180,90 285,90 285,128" StrokeLineJoin="Round">
+                                <Polyline.Style>
+                                    <Style TargetType="Polyline">
+                                        <Setter Property="Stroke" Value="{DynamicResource Akzent}"/>
+                                        <Setter Property="StrokeThickness" Value="2"/>
+                                        <Setter Property="StrokeDashArray" Value="3,6"/>
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Pumpe}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard RepeatBehavior="Forever">
+                                                            <DoubleAnimation Storyboard.TargetProperty="StrokeDashOffset"
+                                                                             From="18" To="0" Duration="0:0:1"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Polyline.Style>
+                            </Polyline>
+
+                            <!-- Flussanzeige Rücklauf -->
+                            <Polyline Points="285,172 285,210 180,210" StrokeLineJoin="Round">
+                                <Polyline.Style>
+                                    <Style TargetType="Polyline">
+                                        <Setter Property="Stroke" Value="{DynamicResource Akzent}"/>
+                                        <Setter Property="StrokeThickness" Value="2"/>
+                                        <Setter Property="StrokeDashArray" Value="3,6"/>
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Pumpe}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard RepeatBehavior="Forever">
+                                                            <DoubleAnimation Storyboard.TargetProperty="StrokeDashOffset"
+                                                                             From="0" To="18" Duration="0:0:1"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Polyline.Style>
+                            </Polyline>
+
+                            <!-- Behälter -->
+                            <Rectangle Canvas.Left="40" Canvas.Top="50" Width="140" Height="180"
+                                       RadiusX="5" RadiusY="5"
+                                       Stroke="{DynamicResource KarteRand}" StrokeThickness="1.5"
+                                       Fill="{DynamicResource Zelle}"/>
+                            <Rectangle Canvas.Left="48" Canvas.Top="140" Width="124" Height="82"
+                                       Fill="{DynamicResource AkzentSoft}"/>
+                            <TextBlock Text="{Binding MaschinenName}" Canvas.Left="52" Canvas.Top="58"
+                                       FontSize="9" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextSekundaer}"/>
+                            <StackPanel Canvas.Left="52" Canvas.Top="72" Orientation="Horizontal">
+                                <TextBlock Text="{Binding Temperatur, StringFormat={}{0:F1}}" FontSize="22"
+                                           FontWeight="SemiBold" Typography.NumeralAlignment="Tabular">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="LIVE"/>
-                                            <Setter Property="Foreground" Value="{DynamicResource Akzent}"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource TextPrimaer}"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IstSimulation}" Value="True">
-                                                    <Setter Property="Text" Value="SIMULATION"/>
+                                                <DataTrigger Binding="{Binding WarnungAktiv}" Value="True">
                                                     <Setter Property="Foreground" Value="{DynamicResource Warnung}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding KritischAktiv}" Value="True">
+                                                    <Setter Property="Foreground" Value="{DynamicResource Gefahr}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
+                                <TextBlock Text="°C" FontSize="10" VerticalAlignment="Bottom" Margin="2,0,0,4"
+                                           Foreground="{DynamicResource TextSekundaer}"/>
                             </StackPanel>
-                        </Border>
-                    </StackPanel>
 
-                    <Grid Margin="0,8,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Temperatur, StringFormat={}{0:F1}}"
-                                           FontSize="48" FontWeight="SemiBold"
-                                           Foreground="{DynamicResource TextPrimaer}"/>
-                                <TextBlock Text="°C" FontSize="18" Margin="6,18,0,0"
-                                           Foreground="{DynamicResource Akzent}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                                <TextBlock Text="Letzte Antwort:" FontSize="12"
-                                           Foreground="{DynamicResource TextSekundaer}" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding LetzteAntwortMs, Mode=OneWay}"
-                                           FontSize="12" FontWeight="SemiBold"
-                                           Foreground="{DynamicResource Akzent}"
-                                           Width="44" TextAlignment="Right" Margin="6,0,0,0"/>
-                                <TextBlock Text=" ms" FontSize="12"
-                                           Foreground="{DynamicResource TextSekundaer}" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly"
-                                 MaxHeight="180" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <views:Rundanzeige Wert="{Binding Temperatur}" Width="236"/>
-                        </Viewbox>
-                    </Grid>
+                            <!-- Heizwendel -->
+                            <Polyline Points="55,220 65,210 75,220 85,210 95,220 105,210 115,220 125,210 135,220 145,210 155,220 165,210">
+                                <Polyline.Style>
+                                    <Style TargetType="Polyline">
+                                        <Setter Property="StrokeThickness" Value="2.5"/>
+                                        <Setter Property="Stroke" Value="{DynamicResource SchalterAus}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Heizung}" Value="True">
+                                                <Setter Property="Stroke" Value="{DynamicResource Gefahr}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Polyline.Style>
+                            </Polyline>
+                            <TextBlock Text="E1" Canvas.Left="55" Canvas.Top="224" FontSize="8"
+                                       Foreground="{DynamicResource TextSekundaer}"/>
 
-                    <Rectangle Height="1" Fill="{DynamicResource Trennlinie}" Margin="0,14,0,14"/>
+                            <!-- Pumpe -->
+                            <Ellipse Canvas.Left="263" Canvas.Top="128" Width="44" Height="44"
+                                     Stroke="{DynamicResource KarteRand}" StrokeThickness="1.5"
+                                     Fill="{DynamicResource Zelle}"/>
+                            <Path Data="M 285,136 L 294,154 L 276,154 Z">
+                                <Path.Style>
+                                    <Style TargetType="Path">
+                                        <Setter Property="Fill" Value="{DynamicResource SchalterAus}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Pumpe}" Value="True">
+                                                <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Path.Style>
+                            </Path>
+                            <TextBlock Text="P1" Canvas.Left="277" Canvas.Top="176" FontSize="8"
+                                       Foreground="{DynamicResource TextSekundaer}"/>
 
-                    <Button Content="{Binding StartStoppText}" Command="{Binding StartStoppCommand}"
-                            AutomationProperties.Name="StartStopp"
-                            Style="{StaticResource AktionsButton}" HorizontalAlignment="Left"/>
-                </StackPanel>
+                            <!-- Messstellen -->
+                            <Line X1="75" Y1="36" X2="75" Y2="50" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                            <Ellipse Canvas.Left="59" Canvas.Top="4" Width="32" Height="32"
+                                     Stroke="{DynamicResource KarteRand}" StrokeThickness="1.5"
+                                     Fill="{DynamicResource Zelle}"/>
+                            <TextBlock Text="TT" Canvas.Left="67" Canvas.Top="13" FontSize="9"
+                                       FontWeight="SemiBold" Foreground="{DynamicResource TextSekundaer}"/>
+
+                            <Line X1="110" Y1="230" X2="110" Y2="259" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                            <Ellipse Canvas.Left="94" Canvas.Top="259" Width="32" Height="32"
+                                     Stroke="{DynamicResource KarteRand}" StrokeThickness="1.5"
+                                     Fill="{DynamicResource Zelle}"/>
+                            <TextBlock Text="TIC" Canvas.Left="98" Canvas.Top="268" FontSize="8"
+                                       FontWeight="SemiBold" Foreground="{DynamicResource TextSekundaer}"/>
+                            <TextBlock Canvas.Left="86" Canvas.Top="296" FontSize="9"
+                                       Foreground="{DynamicResource TextSekundaer}">
+                                <Run Text="{Binding Sollwert, StringFormat={}{0:F0}, Mode=OneWay}"/><Run Text=" °C"/>
+                            </TextBlock>
+
+                            <!-- Leitungsbeschriftung -->
+                            <TextBlock Text="{DynamicResource Vorlauf}" Canvas.Left="196" Canvas.Top="74"
+                                       FontSize="8" Foreground="{DynamicResource TextSekundaer}"/>
+                            <TextBlock Text="{DynamicResource Ruecklauf}" Canvas.Left="196" Canvas.Top="214"
+                                       FontSize="8" Foreground="{DynamicResource TextSekundaer}"/>
+                        </Canvas>
+                    </Viewbox>
+                </DockPanel>
             </Border>
 
-            <!-- Trendkarte -->
-            <Border Grid.Column="1" Style="{StaticResource KarteStil}">
+            <!-- Verlauf -->
+            <Border Grid.Column="2" Style="{StaticResource KarteStil}" Padding="14">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <DockPanel Grid.Row="0">
-                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                            <Ellipse Width="8" Height="8" Fill="{DynamicResource Akzent}"
-                                     Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="LIVE" FontSize="11" FontWeight="SemiBold"
-                                       Foreground="{DynamicResource Akzent}"/>
+                    <Grid Grid.Row="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{DynamicResource VerlaufTitel}" Style="{StaticResource AbschnittTitelStil}"/>
+                            <TextBlock Text="{Binding CursorText}" Margin="10,0,0,0" FontSize="10" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Akzent}" VerticalAlignment="Center"
+                                       Visibility="{Binding CursorSichtbar, Converter={StaticResource BoolZuSichtbarkeit}}"/>
                         </StackPanel>
-                        <TextBlock Text="TEMPERATURVERLAUF" Style="{StaticResource AbschnittTitelStil}"/>
-                    </DockPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="{DynamicResource Zeitfenster}" FontSize="10" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource TextSekundaer}"/>
+                            <Button Command="{Binding Fenster1MinCommand}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource FensterButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Fenster1Aktiv}" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource AkzentSoft}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource Akzent}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <TextBlock>
+                                    <Run Text="1 "/><Run Text="{DynamicResource MinuteKurz}"/>
+                                </TextBlock>
+                            </Button>
+                            <Button Command="{Binding Fenster5MinCommand}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource FensterButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Fenster5Aktiv}" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource AkzentSoft}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource Akzent}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <TextBlock>
+                                    <Run Text="5 "/><Run Text="{DynamicResource MinuteKurz}"/>
+                                </TextBlock>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
 
-                    <Viewbox Grid.Row="1" Stretch="Uniform" Margin="0,12,0,0">
-                        <Grid Width="280" Height="360" Background="{DynamicResource Zelle}">
+                    <Viewbox Grid.Row="1" Stretch="Uniform" Margin="0,12,0,0"
+                             HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                        <Grid Width="334" Height="292">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="260"/>
+                                <RowDefinition Height="18"/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="240"/>
+                                <ColumnDefinition Width="34"/>
+                                <ColumnDefinition Width="300"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Wertachse -->
-                            <Canvas Grid.Column="0" Width="40" Height="360">
-                                <TextBlock Text="120" Canvas.Top="-8" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
-                                <TextBlock Text="90" Canvas.Top="82" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
-                                <TextBlock Text="60" Canvas.Top="172" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
-                                <TextBlock Text="30" Canvas.Top="262" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
-                                <TextBlock Text="0" Canvas.Top="352" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
+                            <!-- Werteachse -->
+                            <Canvas Grid.Row="0" Grid.Column="0" Width="30" Height="260">
+                                <TextBlock Text="120" Canvas.Top="-6" Canvas.Left="0" FontSize="9"
+                                           Foreground="{DynamicResource TextSekundaer}"/>
+                                <TextBlock Text="90" Canvas.Top="59" Canvas.Left="6" FontSize="9"
+                                           Foreground="{DynamicResource TextSekundaer}"/>
+                                <TextBlock Text="60" Canvas.Top="124" Canvas.Left="6" FontSize="9"
+                                           Foreground="{DynamicResource TextSekundaer}"/>
+                                <TextBlock Text="30" Canvas.Top="189" Canvas.Left="6" FontSize="9"
+                                           Foreground="{DynamicResource TextSekundaer}"/>
+                                <TextBlock Text="0" Canvas.Top="250" Canvas.Left="14" FontSize="9"
+                                           Foreground="{DynamicResource TextSekundaer}"/>
                             </Canvas>
 
                             <!-- Plot -->
-                            <Canvas Grid.Column="1" Width="240" Height="360">
-                                <Line X1="0" Y1="0" X2="240" Y2="0" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
-                                <Line X1="0" Y1="90" X2="240" Y2="90" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
-                                <Line X1="0" Y1="180" X2="240" Y2="180" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
-                                <Line X1="0" Y1="270" X2="240" Y2="270" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
-                                <Line X1="0" Y1="360" X2="240" Y2="360" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                            <Canvas x:Name="Plot" Grid.Row="0" Grid.Column="1" Width="300" Height="260"
+                                    Background="{DynamicResource Zelle}"
+                                    MouseMove="Plot_MouseMove" MouseLeave="Plot_MouseLeave">
+                                <Line X1="0" Y1="0" X2="300" Y2="0" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                                <Line X1="0" Y1="65" X2="300" Y2="65" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                                <Line X1="0" Y1="130" X2="300" Y2="130" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                                <Line X1="0" Y1="195" X2="300" Y2="195" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                                <Line X1="0" Y1="260" X2="300" Y2="260" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
 
-                                <Line X1="0" X2="240"
-                                      Y1="{Binding SollwertY}" Y2="{Binding SollwertY}"
-                                      Stroke="{DynamicResource Warnung}" StrokeThickness="1.5"
-                                      StrokeDashArray="4,4"/>
+                                <!-- Zeitraster -->
+                                <Line X1="75" Y1="0" X2="75" Y2="260" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1" Opacity="0.7"/>
+                                <Line X1="150" Y1="0" X2="150" Y2="260" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1" Opacity="0.7"/>
+                                <Line X1="225" Y1="0" X2="225" Y2="260" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1" Opacity="0.7"/>
 
-                                <Polyline Stroke="{DynamicResource Akzent}" StrokeThickness="2"
-                                          StrokeLineJoin="Round" Points="{Binding TrendPunkte}">
-                                    <Polyline.Effect>
-                                        <DropShadowEffect Color="#22D3EE" BlurRadius="8" ShadowDepth="0" Opacity="0.45"/>
-                                    </Polyline.Effect>
-                                </Polyline>
+                                <Line X1="0" X2="300" Y1="{Binding GrenzeWarnungY}" Y2="{Binding GrenzeWarnungY}"
+                                      Stroke="{DynamicResource Warnung}" StrokeThickness="1" StrokeDashArray="4,4" Opacity="0.9"/>
+                                <Line X1="0" X2="300" Y1="{Binding GrenzeKritischY}" Y2="{Binding GrenzeKritischY}"
+                                      Stroke="{DynamicResource Gefahr}" StrokeThickness="1" StrokeDashArray="4,4" Opacity="0.9"/>
+
+                                <Line X1="0" X2="300" Y1="{Binding SollwertY}" Y2="{Binding SollwertY}"
+                                      Stroke="{DynamicResource Info}" StrokeThickness="1.2" StrokeDashArray="6,4"/>
+
+                                <Polyline Stroke="{DynamicResource Akzent}" StrokeThickness="1.8"
+                                          StrokeLineJoin="Round" Points="{Binding TrendPunkte}"/>
+
+                                <Line X1="{Binding CursorX}" Y1="0" X2="{Binding CursorX}" Y2="260"
+                                      Stroke="{DynamicResource TextSekundaer}" StrokeThickness="1"
+                                      StrokeDashArray="2,3"
+                                      Visibility="{Binding CursorSichtbar, Converter={StaticResource BoolZuSichtbarkeit}}"/>
+                                <Line X1="0" Y1="{Binding CursorY}" X2="300" Y2="{Binding CursorY}"
+                                      Stroke="{DynamicResource TextSekundaer}" StrokeThickness="1" Opacity="0.5"
+                                      Visibility="{Binding CursorSichtbar, Converter={StaticResource BoolZuSichtbarkeit}}"/>
                             </Canvas>
+
+                            <!-- Zeitachse -->
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AchseLinks}" FontSize="9"
+                                       HorizontalAlignment="Left" Foreground="{DynamicResource TextSekundaer}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AchseMitte}" FontSize="9"
+                                       HorizontalAlignment="Center" Foreground="{DynamicResource TextSekundaer}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="0" FontSize="9"
+                                       HorizontalAlignment="Right" Foreground="{DynamicResource TextSekundaer}"/>
                         </Grid>
                     </Viewbox>
+
+                    <!-- Legende -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+                        <Rectangle Width="14" Height="2" Fill="{DynamicResource Warnung}" VerticalAlignment="Center"/>
+                        <TextBlock Text=" 80 °C" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
+                        <Rectangle Width="14" Height="2" Fill="{DynamicResource Gefahr}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        <TextBlock Text=" 90 °C" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
+                        <Rectangle Width="14" Height="2" Fill="{DynamicResource Info}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Sollwert}" FontSize="9" Margin="3,0,0,0"
+                                   Foreground="{DynamicResource TextSekundaer}"/>
+                    </StackPanel>
                 </Grid>
             </Border>
         </Grid>
-
-        <!-- Kleine Statuskarten -->
-        <UniformGrid Grid.Row="2" Columns="3" Margin="0,16,0,0">
-
-            <Border Margin="0,0,8,0" Style="{StaticResource KarteStil}" Padding="16">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Ellipse Width="10" Height="10" VerticalAlignment="Center">
-                        <Ellipse.Style>
-                            <Style TargetType="Ellipse">
-                                <Setter Property="Fill" Value="{DynamicResource SchalterAus}"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Heizung}" Value="True">
-                                        <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Ellipse.Style>
-                    </Ellipse>
-                    <StackPanel Margin="12,0,0,0">
-                        <TextBlock Text="Heizung" FontSize="11" Foreground="{DynamicResource TextSekundaer}"/>
-                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaer}">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Text" Value="AUS"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Heizung}" Value="True">
-                                            <Setter Property="Text" Value="EIN"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-
-            <Border Margin="4,0,4,0" Style="{StaticResource KarteStil}" Padding="16">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Ellipse Width="10" Height="10" VerticalAlignment="Center">
-                        <Ellipse.Style>
-                            <Style TargetType="Ellipse">
-                                <Setter Property="Fill" Value="{DynamicResource SchalterAus}"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Pumpe}" Value="True">
-                                        <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Ellipse.Style>
-                    </Ellipse>
-                    <StackPanel Margin="12,0,0,0">
-                        <TextBlock Text="Pumpe" FontSize="11" Foreground="{DynamicResource TextSekundaer}"/>
-                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaer}">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Text" Value="AUS"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Pumpe}" Value="True">
-                                            <Setter Property="Text" Value="EIN"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-
-            <Border Margin="8,0,0,0" Style="{StaticResource KarteStil}" Padding="16">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="🌡" FontSize="20" VerticalAlignment="Center"/>
-                    <StackPanel Margin="12,0,0,0">
-                        <TextBlock Text="Sollwert" FontSize="11" Foreground="{DynamicResource TextSekundaer}"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Sollwert, StringFormat={}{0:F0}}"
-                                       FontSize="14" FontWeight="SemiBold"
-                                       Foreground="{DynamicResource TextPrimaer}"/>
-                            <TextBlock Text=" °C" FontSize="11" Foreground="{DynamicResource TextSekundaer}"
-                                       VerticalAlignment="Bottom" Margin="2,0,0,2"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-        </UniformGrid>
     </Grid>
 </UserControl>

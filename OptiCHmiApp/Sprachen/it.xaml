@@ -1,0 +1,84 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- Navigation -->
+    <sys:String x:Key="MenueTitel">MENU</sys:String>
+    <sys:String x:Key="MenueUebersicht">Panoramica</sys:String>
+    <sys:String x:Key="MenueAlarme">Allarmi</sys:String>
+    <sys:String x:Key="MenueHandbetrieb">Funzionamento manuale</sys:String>
+    <sys:String x:Key="MenueEinstellungen">Impostazioni</sys:String>
+    <sys:String x:Key="AppUntertitel">HMI DASHBOARD</sys:String>
+
+    <!-- Design -->
+    <sys:String x:Key="ThemeTooltipZuHell">Passa al tema chiaro</sys:String>
+    <sys:String x:Key="ThemeTooltipZuDunkel">Passa al tema scuro</sys:String>
+
+    <!-- Panoramica -->
+    <sys:String x:Key="TemperaturTitel">TEMPERATURA PLC</sys:String>
+    <sys:String x:Key="VerlaufTitel">ANDAMENTO TEMPERATURA</sys:String>
+    <sys:String x:Key="Live">LIVE</sys:String>
+    <sys:String x:Key="Simulation">SIMULAZIONE</sys:String>
+    <sys:String x:Key="LetzteAntwort">Ultima risposta:</sys:String>
+    <sys:String x:Key="Start">Avvia</sys:String>
+    <sys:String x:Key="Stopp">Ferma</sys:String>
+    <sys:String x:Key="Heizung">Riscaldamento</sys:String>
+    <sys:String x:Key="Pumpe">Pompa</sys:String>
+    <sys:String x:Key="Sollwert">Setpoint</sys:String>
+    <sys:String x:Key="Ein">ACCESO</sys:String>
+    <sys:String x:Key="Aus">SPENTO</sys:String>
+    <sys:String x:Key="Verbunden">CONNESSO</sys:String>
+    <sys:String x:Key="Getrennt">SCONNESSO</sys:String>
+    <sys:String x:Key="Laeuft">IN MARCIA</sys:String>
+    <sys:String x:Key="Gestoppt">FERMO</sys:String>
+    <sys:String x:Key="Notaus">EMERGENZA</sys:String>
+    <sys:String x:Key="AlarmAnzahl">{0} ALLARME</sys:String>
+    <sys:String x:Key="KeineAlarme">0 ALLARMI</sys:String>
+    <sys:String x:Key="ZielErreicht">SETPOINT RAGGIUNTO: </sys:String>
+    <sys:String x:Key="AutomatikGestoppt">ARRESTO AUTOMATICO</sys:String>
+
+    <!-- Funzionamento manuale -->
+    <sys:String x:Key="HandbetriebTitel">FUNZIONAMENTO MANUALE</sys:String>
+    <sys:String x:Key="PumpeBeschreibung">Circuito refrigerante</sys:String>
+    <sys:String x:Key="HeizungBeschreibung">Circuito di riscaldamento</sys:String>
+    <sys:String x:Key="NotAus">EMERGENZA</sys:String>
+    <sys:String x:Key="Reset">RESET</sys:String>
+    <sys:String x:Key="Bereitschaft">PRONTO</sys:String>
+    <sys:String x:Key="AnlageInBetrieb">IMPIANTO IN ESERCIZIO</sys:String>
+
+    <!-- Allarmi -->
+    <sys:String x:Key="AlarmTitel">ALLARMI</sys:String>
+    <sys:String x:Key="AlleQuittieren">Conferma tutti</sys:String>
+    <sys:String x:Key="Aktiv">ATTIVO</sys:String>
+    <sys:String x:Key="Quittiert">CONFERMATO</sys:String>
+    <sys:String x:Key="Quittieren">Conferma</sys:String>
+    <sys:String x:Key="AlarmAktiv">ATTIVI: </sys:String>
+    <sys:String x:Key="AlarmTempKritisch">Temperatura criticamente alta</sys:String>
+    <sys:String x:Key="AlarmTempWarnung">Temperatura troppo alta</sys:String>
+    <sys:String x:Key="AlarmSollwertErreicht">Setpoint raggiunto</sys:String>
+    <sys:String x:Key="AlarmVerbindungGetrennt">Connessione interrotta (simulazione)</sys:String>
+    <sys:String x:Key="BereichKessel">Caldaia</sys:String>
+    <sys:String x:Key="BereichKommunikation">Comunicazione</sys:String>
+
+    <!-- Impostazioni -->
+    <sys:String x:Key="VerbindungTitel">CONNESSIONE</sys:String>
+    <sys:String x:Key="BackendAdresse">Indirizzo backend</sys:String>
+    <sys:String x:Key="BackendAdresseHinweis">L'indirizzo viene letto all'avvio – le modifiche hanno effetto dopo il riavvio del client.</sys:String>
+    <sys:String x:Key="AbfrageIntervall">Intervallo di polling (ms)</sys:String>
+    <sys:String x:Key="DarstellungTitel">ASPETTO</sys:String>
+    <sys:String x:Key="DunklesDesign">Tema scuro</sys:String>
+    <sys:String x:Key="SpracheTitel">LINGUA</sys:String>
+    <sys:String x:Key="Speichern">Salva</sys:String>
+    <sys:String x:Key="Gespeichert">Impostazioni salvate.</sys:String>
+
+    <!-- Schema di processo / KPI -->
+    <sys:String x:Key="Prozessschema">SCHEMA DI PROCESSO</sys:String>
+    <sys:String x:Key="Temperatur">Temperatura</sys:String>
+    <sys:String x:Key="Vorlauf">Mandata</sys:String>
+    <sys:String x:Key="Ruecklauf">Ritorno</sys:String>
+    <sys:String x:Key="Grenzwerte">Limiti</sys:String>
+    <sys:String x:Key="Zeitfenster">Finestra temporale</sys:String>
+    <sys:String x:Key="MinuteKurz">min</sys:String>
+    <sys:String x:Key="LetzteAktualisierung">Ultimo aggiornamento</sys:String>
+    <sys:String x:Key="AlarmeAnzeigen">Mostra allarmi</sys:String>
+</ResourceDictionary>

@@ -1,0 +1,84 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- Navigation -->
+    <sys:String x:Key="MenueTitel">MENÜ</sys:String>
+    <sys:String x:Key="MenueUebersicht">Genel Bakış</sys:String>
+    <sys:String x:Key="MenueAlarme">Alarmlar</sys:String>
+    <sys:String x:Key="MenueHandbetrieb">Manuel Mod</sys:String>
+    <sys:String x:Key="MenueEinstellungen">Ayarlar</sys:String>
+    <sys:String x:Key="AppUntertitel">HMI DASHBOARD</sys:String>
+
+    <!-- Design -->
+    <sys:String x:Key="ThemeTooltipZuHell">Açık temaya geç</sys:String>
+    <sys:String x:Key="ThemeTooltipZuDunkel">Koyu temaya geç</sys:String>
+
+    <!-- Genel Bakış -->
+    <sys:String x:Key="TemperaturTitel">PLC SICAKLIK</sys:String>
+    <sys:String x:Key="VerlaufTitel">SICAKLIK TRENDİ</sys:String>
+    <sys:String x:Key="Live">CANLI</sys:String>
+    <sys:String x:Key="Simulation">SİMÜLASYON</sys:String>
+    <sys:String x:Key="LetzteAntwort">Son yanıt:</sys:String>
+    <sys:String x:Key="Start">Başlat</sys:String>
+    <sys:String x:Key="Stopp">Durdur</sys:String>
+    <sys:String x:Key="Heizung">Isıtıcı</sys:String>
+    <sys:String x:Key="Pumpe">Pompa</sys:String>
+    <sys:String x:Key="Sollwert">Hedef</sys:String>
+    <sys:String x:Key="Ein">AÇIK</sys:String>
+    <sys:String x:Key="Aus">KAPALI</sys:String>
+    <sys:String x:Key="Verbunden">BAĞLI</sys:String>
+    <sys:String x:Key="Getrennt">BAĞLANTI YOK</sys:String>
+    <sys:String x:Key="Laeuft">ÇALIŞIYOR</sys:String>
+    <sys:String x:Key="Gestoppt">DURDURULDU</sys:String>
+    <sys:String x:Key="Notaus">ACİL STOP</sys:String>
+    <sys:String x:Key="AlarmAnzahl">{0} ALARM</sys:String>
+    <sys:String x:Key="KeineAlarme">0 ALARM</sys:String>
+    <sys:String x:Key="ZielErreicht">HEDEFE ULAŞILDI: </sys:String>
+    <sys:String x:Key="AutomatikGestoppt">OTOMATİK DURDU</sys:String>
+
+    <!-- Manuel Mod -->
+    <sys:String x:Key="HandbetriebTitel">MANUEL MOD</sys:String>
+    <sys:String x:Key="PumpeBeschreibung">Soğutma devresi</sys:String>
+    <sys:String x:Key="HeizungBeschreibung">Isıtma devresi</sys:String>
+    <sys:String x:Key="NotAus">ACİL STOP</sys:String>
+    <sys:String x:Key="Reset">RESET</sys:String>
+    <sys:String x:Key="Bereitschaft">HAZIR</sys:String>
+    <sys:String x:Key="AnlageInBetrieb">SİSTEM ÇALIŞIYOR</sys:String>
+
+    <!-- Alarmlar -->
+    <sys:String x:Key="AlarmTitel">ALARMLAR</sys:String>
+    <sys:String x:Key="AlleQuittieren">Tümünü onayla</sys:String>
+    <sys:String x:Key="Aktiv">AKTİF</sys:String>
+    <sys:String x:Key="Quittiert">ONAYLANDI</sys:String>
+    <sys:String x:Key="Quittieren">Onayla</sys:String>
+    <sys:String x:Key="AlarmAktiv">AKTİF: </sys:String>
+    <sys:String x:Key="AlarmTempKritisch">Sıcaklık kritik seviyede</sys:String>
+    <sys:String x:Key="AlarmTempWarnung">Sıcaklık çok yüksek</sys:String>
+    <sys:String x:Key="AlarmSollwertErreicht">Hedef sıcaklığa ulaşıldı</sys:String>
+    <sys:String x:Key="AlarmVerbindungGetrennt">Bağlantı koptu (simülasyon)</sys:String>
+    <sys:String x:Key="BereichKessel">Kazan</sys:String>
+    <sys:String x:Key="BereichKommunikation">İletişim</sys:String>
+
+    <!-- Ayarlar -->
+    <sys:String x:Key="VerbindungTitel">BAĞLANTI</sys:String>
+    <sys:String x:Key="BackendAdresse">Backend adresi</sys:String>
+    <sys:String x:Key="BackendAdresseHinweis">Adres başlangıçta okunur – değişiklikler istemci yeniden başlatıldıktan sonra geçerli olur.</sys:String>
+    <sys:String x:Key="AbfrageIntervall">Sorgulama aralığı (ms)</sys:String>
+    <sys:String x:Key="DarstellungTitel">GÖRÜNÜM</sys:String>
+    <sys:String x:Key="DunklesDesign">Koyu tema</sys:String>
+    <sys:String x:Key="SpracheTitel">DİL</sys:String>
+    <sys:String x:Key="Speichern">Kaydet</sys:String>
+    <sys:String x:Key="Gespeichert">Ayarlar kaydedildi.</sys:String>
+
+    <!-- Proses şeması / KPI -->
+    <sys:String x:Key="Prozessschema">PROSES ŞEMASI</sys:String>
+    <sys:String x:Key="Temperatur">Sıcaklık</sys:String>
+    <sys:String x:Key="Vorlauf">Gidiş</sys:String>
+    <sys:String x:Key="Ruecklauf">Dönüş</sys:String>
+    <sys:String x:Key="Grenzwerte">Limitler</sys:String>
+    <sys:String x:Key="Zeitfenster">Zaman aralığı</sys:String>
+    <sys:String x:Key="MinuteKurz">dk</sys:String>
+    <sys:String x:Key="LetzteAktualisierung">Son güncelleme</sys:String>
+    <sys:String x:Key="AlarmeAnzeigen">Alarmları göster</sys:String>
+</ResourceDictionary>

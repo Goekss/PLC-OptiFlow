@@ -10,14 +10,14 @@
 
         <!-- Kopfzeile -->
         <DockPanel Grid.Row="0">
-            <Button DockPanel.Dock="Right" Content="Alle quittieren"
+            <Button DockPanel.Dock="Right" Content="{DynamicResource AlleQuittieren}"
                     Command="{Binding AlleQuittierenCommand}"
                     Style="{StaticResource SekundaerButtonStil}"/>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="ALARME" Style="{StaticResource AbschnittTitelStil}"/>
+                <TextBlock Text="{DynamicResource AlarmTitel}" Style="{StaticResource AbschnittTitelStil}"/>
                 <Border Background="{DynamicResource Gefahr}" CornerRadius="10" Padding="8,3" Margin="12,0,0,0">
-                    <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#FFFFFF">
-                        <Run Text="AKTIV: "/><Run Text="{Binding AktiveAnzahl, Mode=OneWay}"/>
+                    <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource TextInvertiert}">
+                        <Run Text="{DynamicResource AlarmAktiv}"/><Run Text="{Binding AktiveAnzahl, Mode=OneWay}"/>
                     </TextBlock>
                 </Border>
             </StackPanel>
@@ -82,11 +82,11 @@
                                     <TextBlock FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Right">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Text" Value="AKTIV"/>
+                                                <Setter Property="Text" Value="{DynamicResource Aktiv}"/>
                                                 <Setter Property="Foreground" Value="{DynamicResource Gefahr}"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IstQuittiert}" Value="True">
-                                                        <Setter Property="Text" Value="QUITTIERT"/>
+                                                        <Setter Property="Text" Value="{DynamicResource Quittiert}"/>
                                                         <Setter Property="Foreground" Value="{DynamicResource Erfolg}"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -95,7 +95,7 @@
                                     </TextBlock>
                                     <TextBlock Text="{Binding Zeit}" FontSize="12" HorizontalAlignment="Right"
                                                Margin="0,6,0,0" Foreground="{DynamicResource TextSekundaer}"/>
-                                    <Button Content="Quittieren" Margin="0,10,0,0" Padding="14,6" FontSize="12"
+                                    <Button Content="{DynamicResource Quittieren}" Margin="0,10,0,0" Padding="14,6" FontSize="12"
                                             Command="{Binding DataContext.QuittierenCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}">
                                         <Button.Style>

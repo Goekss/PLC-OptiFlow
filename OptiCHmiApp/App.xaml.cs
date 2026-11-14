@@ -13,6 +13,7 @@ public partial class App : Application
     {
         BenutzerEinstellungen.Laden();
         ThemeManager.Initialisieren();
+        Sprache.Initialisieren();
         base.OnStartup(e);
     }
 }

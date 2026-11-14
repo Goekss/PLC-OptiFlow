@@ -1,0 +1,84 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- Navigation -->
+    <sys:String x:Key="MenueTitel">MENU</sys:String>
+    <sys:String x:Key="MenueUebersicht">Vue d'ensemble</sys:String>
+    <sys:String x:Key="MenueAlarme">Alarmes</sys:String>
+    <sys:String x:Key="MenueHandbetrieb">Mode manuel</sys:String>
+    <sys:String x:Key="MenueEinstellungen">Paramètres</sys:String>
+    <sys:String x:Key="AppUntertitel">HMI DASHBOARD</sys:String>
+
+    <!-- Design -->
+    <sys:String x:Key="ThemeTooltipZuHell">Passer au thème clair</sys:String>
+    <sys:String x:Key="ThemeTooltipZuDunkel">Passer au thème sombre</sys:String>
+
+    <!-- Vue d'ensemble -->
+    <sys:String x:Key="TemperaturTitel">TEMPÉRATURE PLC</sys:String>
+    <sys:String x:Key="VerlaufTitel">COURBE DE TEMPÉRATURE</sys:String>
+    <sys:String x:Key="Live">EN DIRECT</sys:String>
+    <sys:String x:Key="Simulation">SIMULATION</sys:String>
+    <sys:String x:Key="LetzteAntwort">Dernière réponse :</sys:String>
+    <sys:String x:Key="Start">Démarrer</sys:String>
+    <sys:String x:Key="Stopp">Arrêter</sys:String>
+    <sys:String x:Key="Heizung">Chauffage</sys:String>
+    <sys:String x:Key="Pumpe">Pompe</sys:String>
+    <sys:String x:Key="Sollwert">Consigne</sys:String>
+    <sys:String x:Key="Ein">MARCHE</sys:String>
+    <sys:String x:Key="Aus">ARRÊT</sys:String>
+    <sys:String x:Key="Verbunden">CONNECTÉ</sys:String>
+    <sys:String x:Key="Getrennt">DÉCONNECTÉ</sys:String>
+    <sys:String x:Key="Laeuft">EN MARCHE</sys:String>
+    <sys:String x:Key="Gestoppt">ARRÊTÉ</sys:String>
+    <sys:String x:Key="Notaus">ARRÊT D'URG.</sys:String>
+    <sys:String x:Key="AlarmAnzahl">{0} ALARME</sys:String>
+    <sys:String x:Key="KeineAlarme">0 ALARME</sys:String>
+    <sys:String x:Key="ZielErreicht">CONSIGNE ATTEINTE : </sys:String>
+    <sys:String x:Key="AutomatikGestoppt">ARRÊT AUTOMATIQUE</sys:String>
+
+    <!-- Mode manuel -->
+    <sys:String x:Key="HandbetriebTitel">MODE MANUEL</sys:String>
+    <sys:String x:Key="PumpeBeschreibung">Circuit de refroidissement</sys:String>
+    <sys:String x:Key="HeizungBeschreibung">Circuit de chauffage</sys:String>
+    <sys:String x:Key="NotAus">ARRÊT D'URGENCE</sys:String>
+    <sys:String x:Key="Reset">RESET</sys:String>
+    <sys:String x:Key="Bereitschaft">PRÊT</sys:String>
+    <sys:String x:Key="AnlageInBetrieb">INSTALLATION EN SERVICE</sys:String>
+
+    <!-- Alarmes -->
+    <sys:String x:Key="AlarmTitel">ALARMES</sys:String>
+    <sys:String x:Key="AlleQuittieren">Acquitter tout</sys:String>
+    <sys:String x:Key="Aktiv">ACTIF</sys:String>
+    <sys:String x:Key="Quittiert">ACQUITTÉ</sys:String>
+    <sys:String x:Key="Quittieren">Acquitter</sys:String>
+    <sys:String x:Key="AlarmAktiv">ACTIFS : </sys:String>
+    <sys:String x:Key="AlarmTempKritisch">Température critique</sys:String>
+    <sys:String x:Key="AlarmTempWarnung">Température trop élevée</sys:String>
+    <sys:String x:Key="AlarmSollwertErreicht">Consigne atteinte</sys:String>
+    <sys:String x:Key="AlarmVerbindungGetrennt">Connexion perdue (simulation)</sys:String>
+    <sys:String x:Key="BereichKessel">Chaudière</sys:String>
+    <sys:String x:Key="BereichKommunikation">Communication</sys:String>
+
+    <!-- Paramètres -->
+    <sys:String x:Key="VerbindungTitel">CONNEXION</sys:String>
+    <sys:String x:Key="BackendAdresse">Adresse du backend</sys:String>
+    <sys:String x:Key="BackendAdresseHinweis">L'adresse est lue au démarrage – les modifications s'appliquent après redémarrage du client.</sys:String>
+    <sys:String x:Key="AbfrageIntervall">Intervalle d'interrogation (ms)</sys:String>
+    <sys:String x:Key="DarstellungTitel">APPARENCE</sys:String>
+    <sys:String x:Key="DunklesDesign">Thème sombre</sys:String>
+    <sys:String x:Key="SpracheTitel">LANGUE</sys:String>
+    <sys:String x:Key="Speichern">Enregistrer</sys:String>
+    <sys:String x:Key="Gespeichert">Paramètres enregistrés.</sys:String>
+
+    <!-- Schéma du processus / KPI -->
+    <sys:String x:Key="Prozessschema">SCHÉMA DU PROCESSUS</sys:String>
+    <sys:String x:Key="Temperatur">Température</sys:String>
+    <sys:String x:Key="Vorlauf">Aller</sys:String>
+    <sys:String x:Key="Ruecklauf">Retour</sys:String>
+    <sys:String x:Key="Grenzwerte">Limites</sys:String>
+    <sys:String x:Key="Zeitfenster">Fenêtre temporelle</sys:String>
+    <sys:String x:Key="MinuteKurz">min</sys:String>
+    <sys:String x:Key="LetzteAktualisierung">Dernière mise à jour</sys:String>
+    <sys:String x:Key="AlarmeAnzeigen">Afficher les alarmes</sys:String>
+</ResourceDictionary>

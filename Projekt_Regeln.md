@@ -60,11 +60,11 @@ Davranış (Backend `PlcService` içinde):
 - Büyük refactor veya mevcut klasör yapısını değiştirme
 
 ## Tamamlanma kriteri (Definition of Done)
-- [ ] Proto: `LeseStatus`, `SchreibeSollwert`, `SchreibeHeizung`, `Notaus`
-- [ ] Backend fiziği ve alarm eşikleri çalışıyor
-- [ ] Handbetrieb ve Alarm ekranları gerçek veriye bağlı
-- [ ] Testler: fizik (ısıtıcı → sıcaklık artar), alarm eşikleri, Notaus
-- [ ] README: amaç, mimari şeması, ekran görüntüleri, çalıştırma adımları
+- [x] Proto: `LeseStatus`, `SchreibeSollwert`, `SchreibeHeizung`, `Notaus`
+- [x] Backend fiziği ve alarm eşikleri çalışıyor
+- [x] Handbetrieb ve Alarm ekranları gerçek veriye bağlı
+- [x] Testler: fizik (ısıtıcı → sıcaklık artar), alarm eşikleri, Notaus
+- [x] README: amaç, mimari şeması, ekran görüntüleri, çalıştırma adımları (DE/EN/TR)
 
 ## Çalışma şekli
 - Her seferinde **tek küçük adım**, sonra dur ve özetle.

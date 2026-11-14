@@ -1,7 +1,7 @@
 # PLC-OptiFlow – Mimari Vizyon (Multi-Screen)
 
 ## Hedef
-Tek bir makine verisi, birden fazla ekranda görülsün:
+Tek bir makine verisi veya coklu makine verileri, birden fazla ekranda görülecek:
 - **Makine başı (WPF):** Operatör izler ve kontrol eder.
 - **Büro PC (WPF):** Operatör/ofis izler.
 - **Tablet, telefon, 3. PC (Browser):** Mühendis veya şef sadece izler.
@@ -34,11 +34,11 @@ XYZ Makinesi (PLC, ileride TwinCAT 3)
 
 | Faz | İçerik | Durum |
 |-----|--------|-------|
-| 1 | Tek makine simülasyonu (Kessel), WPF, alarmlar, testler | Şimdi |
-| 2 | Backend'e SignalR, salt okunur React izleme sayfası | Sonra |
-| 3 | Rol/yetki ayrımı (kontrol / izleme) | Sonra |
-| 4 | TwinCAT 3 ADS bağlantısı (`Beckhoff.TwinCAT.Ads`) | Roadmap |
-| 5 | Çoklu makine (`MaschinenId`, makine listesi) | Roadmap |
+| 1   | Tek makine simülasyonu (Kessel), WPF, alarmlar, testler | Şimdi |
+| 2   | Backend'e SignalR, salt okunur React izleme sayfası | Sonra |
+| 3   | Rol/yetki ayrımı (kontrol / izleme) | Sonra |
+| 4   | TwinCAT 3 ADS bağlantısı (`Beckhoff.TwinCAT.Ads`) | Roadmap |
+| 5   | Çoklu makine (`MaschinenId`, makine listesi) | Roadmap |
 
 ## Şimdi Dikkat Edilecekler (Faz 1)
 - `IPlcService` soyutlamasını koru, ADS'ye geçiş sadece Backend'de olacak.

@@ -11,8 +11,8 @@
             <Setter Property="Background" Value="{DynamicResource Karte}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource KarteRand}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="14"/>
-            <Setter Property="Padding" Value="22"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16"/>
         </Style>
 
         <!-- Primär-Button (Akzent) -->
@@ -82,7 +82,7 @@
         <!-- Gefahr-Button -->
         <Style x:Key="GefahrButtonStil" TargetType="Button" BasedOn="{StaticResource PrimaerButtonStil}">
             <Setter Property="Background" Value="{DynamicResource Gefahr}"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextInvertiert}"/>
         </Style>
 
         <!-- Kopfzeilen-Icon-Button -->
@@ -172,11 +172,8 @@
                                         <Thumb.Template>
                                             <ControlTemplate TargetType="Thumb">
                                                 <Ellipse Fill="{DynamicResource Akzent}"
-                                                         Stroke="{DynamicResource Karte}" StrokeThickness="3">
-                                                    <Ellipse.Effect>
-                                                        <DropShadowEffect Color="#000000" BlurRadius="6" ShadowDepth="0" Opacity="0.3"/>
-                                                    </Ellipse.Effect>
-                                                </Ellipse>
+                                                         Stroke="{DynamicResource Karte}" StrokeThickness="3"
+                                                         Effect="{DynamicResource SchattenGlow}"/>
                                             </ControlTemplate>
                                         </Thumb.Template>
                                     </Thumb>

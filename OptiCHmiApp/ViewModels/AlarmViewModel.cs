@@ -62,6 +62,14 @@ public class AlarmViewModel : ObservableObject
         QuittierenCommand = new RelayCommand<AlarmEintrag>(Quittieren);
         AlleQuittierenCommand = new RelayCommand(AlleQuittieren);
 
+        // Beim Sprachwechsel werden die Meldungen beim nächsten Tick neu erzeugt.
+        // Dil değişiminde mesajlar bir sonraki okumada yeniden oluşturulur.
+        Sprache.SpracheGeaendert += _ =>
+        {
+            Alarme.Clear();
+            OnPropertyChanged(nameof(AktiveAnzahl));
+        };
+
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _timer.Tick += (_, _) => _ = AktualisiereAsync();
         _timer.Start();
@@ -87,21 +95,21 @@ public class AlarmViewModel : ObservableObject
 
         if (status.Temperatur >= 90.0)
         {
-            gewuenscht.Add(new AlarmEintrag("temp_kritisch", jetzt, "Temperatur kritisch hoch", "Kessel", AlarmSchweregrad.Kritisch));
+            gewuenscht.Add(new AlarmEintrag("temp_kritisch", jetzt, Sprache.Text("AlarmTempKritisch"), Sprache.Text("BereichKessel"), AlarmSchweregrad.Kritisch));
         }
         else if (status.Temperatur >= 80.0)
         {
-            gewuenscht.Add(new AlarmEintrag("temp_warnung", jetzt, "Temperatur zu hoch", "Kessel", AlarmSchweregrad.Warnung));
+            gewuenscht.Add(new AlarmEintrag("temp_warnung", jetzt, Sprache.Text("AlarmTempWarnung"), Sprache.Text("BereichKessel"), AlarmSchweregrad.Warnung));
         }
 
         if (status.ZielAlarmSekunden > 0)
         {
-            gewuenscht.Add(new AlarmEintrag("ziel", jetzt, "Sollwert erreicht", "Kessel", AlarmSchweregrad.Warnung));
+            gewuenscht.Add(new AlarmEintrag("ziel", jetzt, Sprache.Text("AlarmSollwertErreicht"), Sprache.Text("BereichKessel"), AlarmSchweregrad.Warnung));
         }
 
         if (_plcService.IstSimulation)
         {
-            gewuenscht.Add(new AlarmEintrag("verbindung", jetzt, "Verbindung getrennt (Simulation)", "Kommunikation", AlarmSchweregrad.Warnung));
+            gewuenscht.Add(new AlarmEintrag("verbindung", jetzt, Sprache.Text("AlarmVerbindungGetrennt"), Sprache.Text("BereichKommunikation"), AlarmSchweregrad.Warnung));
         }
 
         foreach (var vorhanden in Alarme.ToList())

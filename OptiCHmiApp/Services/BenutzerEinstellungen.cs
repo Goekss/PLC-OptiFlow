@@ -18,6 +18,8 @@ public static class BenutzerEinstellungen
 
     public static string Thema { get; set; } = "Dunkel";
 
+    public static string Sprache { get; set; } = "de";
+
     public static void Laden()
     {
         try
@@ -55,6 +57,12 @@ public static class BenutzerEinstellungen
                     case "Thema":
                         Thema = wert == "Hell" ? "Hell" : "Dunkel";
                         break;
+                    case "Sprache":
+                        if (!string.IsNullOrWhiteSpace(wert))
+                        {
+                            Sprache = wert;
+                        }
+                        break;
                 }
             }
         }
@@ -78,7 +86,8 @@ public static class BenutzerEinstellungen
                 Dateipfad,
                 $"BackendAdresse={BackendAdresse}{Environment.NewLine}" +
                 $"AbfrageIntervallMs={AbfrageIntervallMs}{Environment.NewLine}" +
-                $"Thema={Thema}{Environment.NewLine}");
+                $"Thema={Thema}{Environment.NewLine}" +
+                $"Sprache={Sprache}{Environment.NewLine}");
         }
         catch
         {

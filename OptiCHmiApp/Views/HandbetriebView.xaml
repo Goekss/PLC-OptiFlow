@@ -14,7 +14,7 @@
                     Style="{StaticResource GefahrButtonStil}"
                     Command="{Binding NotausCommand}"/>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="HANDBETRIEB" Style="{StaticResource AbschnittTitelStil}"/>
+                <TextBlock Text="{DynamicResource HandbetriebTitel}" Style="{StaticResource AbschnittTitelStil}"/>
                 <Border Background="{DynamicResource AkzentSoft}" CornerRadius="10" Padding="8,3" Margin="12,0,0,0">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="7" Height="7" Fill="{DynamicResource Akzent}" VerticalAlignment="Center"/>
@@ -33,19 +33,19 @@
                     <Border Margin="4" Style="{StaticResource KarteStil}">
                         <StackPanel>
                             <TextBlock Text="❄" FontSize="30"/>
-                            <TextBlock Text="Pumpe" FontSize="15" FontWeight="SemiBold"
+                            <TextBlock Text="{DynamicResource Pumpe}" FontSize="15" FontWeight="SemiBold"
                                        Foreground="{DynamicResource TextPrimaer}" Margin="0,10,0,2"/>
-                            <TextBlock Text="Kühlmittelkreislauf" FontSize="12"
+                            <TextBlock Text="{DynamicResource PumpeBeschreibung}" FontSize="12"
                                        Foreground="{DynamicResource TextSekundaer}" Margin="0,0,0,14"/>
                             <CheckBox Style="{StaticResource UmschalterStil}" IsChecked="{Binding PumpeEin, Mode=TwoWay}">
                                 <TextBlock FontSize="12" FontWeight="SemiBold">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="AUS"/>
+                                            <Setter Property="Text" Value="{DynamicResource Aus}"/>
                                             <Setter Property="Foreground" Value="{DynamicResource TextSekundaer}"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="True">
-                                                    <Setter Property="Text" Value="EIN"/>
+                                                    <Setter Property="Text" Value="{DynamicResource Ein}"/>
                                                     <Setter Property="Foreground" Value="{DynamicResource Akzent}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -59,19 +59,19 @@
                     <Border Margin="4" Style="{StaticResource KarteStil}">
                         <StackPanel>
                             <TextBlock Text="🔥" FontSize="30"/>
-                            <TextBlock Text="Heizung" FontSize="15" FontWeight="SemiBold"
+                            <TextBlock Text="{DynamicResource Heizung}" FontSize="15" FontWeight="SemiBold"
                                        Foreground="{DynamicResource TextPrimaer}" Margin="0,10,0,2"/>
-                            <TextBlock Text="Heizkreislauf" FontSize="12"
+                            <TextBlock Text="{DynamicResource HeizungBeschreibung}" FontSize="12"
                                        Foreground="{DynamicResource TextSekundaer}" Margin="0,0,0,14"/>
                             <CheckBox Style="{StaticResource UmschalterStil}" IsChecked="{Binding HeizungEin, Mode=TwoWay}">
                                 <TextBlock FontSize="12" FontWeight="SemiBold">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="AUS"/>
+                                            <Setter Property="Text" Value="{DynamicResource Aus}"/>
                                             <Setter Property="Foreground" Value="{DynamicResource TextSekundaer}"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="True">
-                                                    <Setter Property="Text" Value="EIN"/>
+                                                    <Setter Property="Text" Value="{DynamicResource Ein}"/>
                                                     <Setter Property="Foreground" Value="{DynamicResource Akzent}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -87,7 +87,7 @@
                 <Border Margin="4,12,4,4" Style="{StaticResource KarteStil}">
                     <StackPanel>
                         <TextBlock Text="🌡" FontSize="30"/>
-                        <TextBlock Text="Sollwert (Hedef sıcaklık)" FontSize="15" FontWeight="SemiBold"
+                        <TextBlock Text="{DynamicResource Sollwert}" FontSize="15" FontWeight="SemiBold"
                                    Foreground="{DynamicResource TextPrimaer}" Margin="0,10,0,0"/>
                         <Slider Style="{StaticResource SchiebereglerStil}" Minimum="20" Maximum="95"
                                 Value="{Binding Sollwert, Mode=TwoWay}" Margin="0,16,0,8"/>
