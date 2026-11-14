@@ -38,33 +38,156 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-
-        <Style x:Key="GitterLinie" TargetType="Border">
-            <Setter Property="BorderBrush" Value="{DynamicResource Trennlinie}"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-        </Style>
-
-        <Style x:Key="KennzahlStil" TargetType="Border" BasedOn="{StaticResource KarteStil}">
-            <Setter Property="Padding" Value="16"/>
-        </Style>
     </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Üst kart: sıcaklık + kadran + kontroller -->
-        <Border Grid.Row="0" Style="{StaticResource KarteStil}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MinWidth="260"/>
-                    <ColumnDefinition Width="*" MaxWidth="240"/>
-                </Grid.ColumnDefinitions>
+        <!-- Statusleiste -->
+        <Border Grid.Row="0" Style="{StaticResource KarteStil}" Padding="14">
+            <StackPanel Orientation="Horizontal">
 
-                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                <!-- Maschinenname -->
+                <Border CornerRadius="10" Padding="10,5" Margin="0,0,10,0" Background="{DynamicResource SchalterAus}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🏭" FontSize="11" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding MaschinenName}" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- IP -->
+                <Border CornerRadius="10" Padding="10,5" Margin="0,0,10,0" Background="{DynamicResource SchalterAus}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🌐" FontSize="11" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding IpAdresse}" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Verbindung -->
+                <Border CornerRadius="10" Padding="10,5" Margin="0,0,10,0" Background="{DynamicResource SchalterAus}">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="8" Height="8" VerticalAlignment="Center">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="{DynamicResource Gefahr}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IstSimulation}" Value="False">
+                                            <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        <TextBlock Text="{Binding VerbindungText}" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Maschinenzustand -->
+                <Border CornerRadius="10" Padding="10,5" Margin="0,0,10,0" Background="{DynamicResource SchalterAus}">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="8" Height="8" VerticalAlignment="Center">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="{DynamicResource SchalterAus}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Notaus}" Value="True">
+                                            <Setter Property="Fill" Value="{DynamicResource Gefahr}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Laeuft}" Value="True">
+                                            <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        <TextBlock Text="{Binding MaschineText}" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Alarme -->
+                <Border CornerRadius="10" Padding="10,5" Background="{DynamicResource SchalterAus}">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="8" Height="8" VerticalAlignment="Center">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="{DynamicResource Gefahr}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding AlarmAnzahl}" Value="0">
+                                            <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        <TextBlock Text="{Binding AlarmText}" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextPrimaer}" Margin="6,0,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Ziel-Alarm / Countdown -->
+                <Border CornerRadius="10" Padding="10,5" Margin="10,0,0,0">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource SchalterAus}"/>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ZielAlarmAktiv}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Background" Value="{DynamicResource Gefahr}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⏱" FontSize="11" VerticalAlignment="Center"/>
+                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="6,0,0,0">
+                            <Run Text="ZIEL ERREICHT: "/>
+                            <Run Text="{Binding ZielAlarmAnzeige, Mode=OneWay}"/>
+                            <Run Text="s"/>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <!-- Automatisch gestoppt -->
+                <Border CornerRadius="10" Padding="10,5" Margin="10,0,0,0">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource Erfolg}"/>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AutoGestoppt}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="✓" FontSize="13" FontWeight="Bold" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+                        <TextBlock Text=" OTOMATIK DURDU" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="#FFFFFF" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <!-- Hauptbereich -->
+        <Grid Grid.Row="1" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Temperaturkarte -->
+            <Border Grid.Column="0" Style="{StaticResource KarteStil}" Margin="0,0,16,0">
+                <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="PLC TEMPERATUR" Style="{StaticResource AbschnittTitelStil}"/>
                         <Border CornerRadius="10" Padding="8,3" Margin="10,0,0,0">
@@ -109,115 +232,186 @@
                         </Border>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                        <TextBlock Text="{Binding Temperatur, StringFormat={}{0:F1}}"
-                                   FontSize="54" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimaer}"/>
-                        <TextBlock Text="°C" FontSize="20" Margin="6,16,0,0"
-                                   Foreground="{DynamicResource Akzent}"/>
-                    </StackPanel>
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Temperatur, StringFormat={}{0:F1}}"
+                                           FontSize="48" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource TextPrimaer}"/>
+                                <TextBlock Text="°C" FontSize="18" Margin="6,18,0,0"
+                                           Foreground="{DynamicResource Akzent}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <TextBlock Text="Letzte Antwort:" FontSize="12"
+                                           Foreground="{DynamicResource TextSekundaer}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding LetzteAntwortMs, Mode=OneWay}"
+                                           FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Akzent}"
+                                           Width="44" TextAlignment="Right" Margin="6,0,0,0"/>
+                                <TextBlock Text=" ms" FontSize="12"
+                                           Foreground="{DynamicResource TextSekundaer}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly"
+                                 MaxHeight="180" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <views:Rundanzeige Wert="{Binding Temperatur}" Width="236"/>
+                        </Viewbox>
+                    </Grid>
 
-                    <Rectangle Height="1" Fill="{DynamicResource Trennlinie}" Margin="0,16,0,16"/>
+                    <Rectangle Height="1" Fill="{DynamicResource Trennlinie}" Margin="0,14,0,14"/>
 
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="{Binding StartStoppText}" Command="{Binding StartStoppCommand}"
-                                Style="{StaticResource AktionsButton}"/>
-                        <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" FontSize="13"
-                                   Foreground="{DynamicResource TextSekundaer}">
-                            <Run Text="Letzte Antwort: "/>
-                            <Run Text="{Binding LetzteAntwortMs, Mode=OneWay}"
-                                 Foreground="{DynamicResource Akzent}" FontWeight="SemiBold"/>
-                            <Run Text=" ms"/>
+                    <Button Content="{Binding StartStoppText}" Command="{Binding StartStoppCommand}"
+                            AutomationProperties.Name="StartStopp"
+                            Style="{StaticResource AktionsButton}" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Trendkarte -->
+            <Border Grid.Column="1" Style="{StaticResource KarteStil}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0">
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Ellipse Width="8" Height="8" Fill="{DynamicResource Akzent}"
+                                     Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="LIVE" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Akzent}"/>
+                        </StackPanel>
+                        <TextBlock Text="TEMPERATURVERLAUF" Style="{StaticResource AbschnittTitelStil}"/>
+                    </DockPanel>
+
+                    <Viewbox Grid.Row="1" Stretch="Uniform" Margin="0,12,0,0">
+                        <Grid Width="280" Height="360" Background="{DynamicResource Zelle}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="240"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Wertachse -->
+                            <Canvas Grid.Column="0" Width="40" Height="360">
+                                <TextBlock Text="120" Canvas.Top="-8" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
+                                <TextBlock Text="90" Canvas.Top="82" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
+                                <TextBlock Text="60" Canvas.Top="172" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
+                                <TextBlock Text="30" Canvas.Top="262" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
+                                <TextBlock Text="0" Canvas.Top="352" Canvas.Left="0" FontSize="9" Foreground="{DynamicResource TextSekundaer}"/>
+                            </Canvas>
+
+                            <!-- Plot -->
+                            <Canvas Grid.Column="1" Width="240" Height="360">
+                                <Line X1="0" Y1="0" X2="240" Y2="0" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                                <Line X1="0" Y1="90" X2="240" Y2="90" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                                <Line X1="0" Y1="180" X2="240" Y2="180" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                                <Line X1="0" Y1="270" X2="240" Y2="270" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+                                <Line X1="0" Y1="360" X2="240" Y2="360" Stroke="{DynamicResource Trennlinie}" StrokeThickness="1"/>
+
+                                <Line X1="0" X2="240"
+                                      Y1="{Binding SollwertY}" Y2="{Binding SollwertY}"
+                                      Stroke="{DynamicResource Warnung}" StrokeThickness="1.5"
+                                      StrokeDashArray="4,4"/>
+
+                                <Polyline Stroke="{DynamicResource Akzent}" StrokeThickness="2"
+                                          StrokeLineJoin="Round" Points="{Binding TrendPunkte}">
+                                    <Polyline.Effect>
+                                        <DropShadowEffect Color="#22D3EE" BlurRadius="8" ShadowDepth="0" Opacity="0.45"/>
+                                    </Polyline.Effect>
+                                </Polyline>
+                            </Canvas>
+                        </Grid>
+                    </Viewbox>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Kleine Statuskarten -->
+        <UniformGrid Grid.Row="2" Columns="3" Margin="0,16,0,0">
+
+            <Border Margin="0,0,8,0" Style="{StaticResource KarteStil}" Padding="16">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="10" Height="10" VerticalAlignment="Center">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="{DynamicResource SchalterAus}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Heizung}" Value="True">
+                                        <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                    <StackPanel Margin="12,0,0,0">
+                        <TextBlock Text="Heizung" FontSize="11" Foreground="{DynamicResource TextSekundaer}"/>
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaer}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="AUS"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Heizung}" Value="True">
+                                            <Setter Property="Text" Value="EIN"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
                         </TextBlock>
                     </StackPanel>
                 </StackPanel>
+            </Border>
 
-                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly"
-                         HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20,0,0,0">
-                    <views:Rundanzeige Wert="{Binding Temperatur}"/>
-                </Viewbox>
-            </Grid>
-        </Border>
-
-        <!-- Kennzahlen -->
-        <UniformGrid x:Name="KpiGrid" Grid.Row="1" Margin="0,12,0,0" Columns="3">
-            <Border Margin="4" Style="{StaticResource KennzahlStil}">
-                <StackPanel>
-                    <TextBlock Text="MINIMUM" FontSize="11" Foreground="{DynamicResource TextSekundaer}"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                        <TextBlock Text="{Binding Minimum}" FontSize="26" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimaer}"/>
-                        <TextBlock Text="°C" FontSize="12" Foreground="{DynamicResource Akzent}"
-                                   VerticalAlignment="Bottom" Margin="4,0,0,5"/>
+            <Border Margin="4,0,4,0" Style="{StaticResource KarteStil}" Padding="16">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="10" Height="10" VerticalAlignment="Center">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="{DynamicResource SchalterAus}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Pumpe}" Value="True">
+                                        <Setter Property="Fill" Value="{DynamicResource Erfolg}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                    <StackPanel Margin="12,0,0,0">
+                        <TextBlock Text="Pumpe" FontSize="11" Foreground="{DynamicResource TextSekundaer}"/>
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaer}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="AUS"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Pumpe}" Value="True">
+                                            <Setter Property="Text" Value="EIN"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <Border Margin="4" Style="{StaticResource KennzahlStil}">
-                <StackPanel>
-                    <TextBlock Text="MAXIMUM" FontSize="11" Foreground="{DynamicResource TextSekundaer}"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                        <TextBlock Text="{Binding Maximum}" FontSize="26" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimaer}"/>
-                        <TextBlock Text="°C" FontSize="12" Foreground="{DynamicResource Akzent}"
-                                   VerticalAlignment="Bottom" Margin="4,0,0,5"/>
+            <Border Margin="8,0,0,0" Style="{StaticResource KarteStil}" Padding="16">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🌡" FontSize="20" VerticalAlignment="Center"/>
+                    <StackPanel Margin="12,0,0,0">
+                        <TextBlock Text="Sollwert" FontSize="11" Foreground="{DynamicResource TextSekundaer}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Sollwert, StringFormat={}{0:F0}}"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextPrimaer}"/>
+                            <TextBlock Text=" °C" FontSize="11" Foreground="{DynamicResource TextSekundaer}"
+                                       VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </Border>
-
-            <Border Margin="4" Style="{StaticResource KennzahlStil}">
-                <StackPanel>
-                    <TextBlock Text="MESSUNGEN" FontSize="11" Foreground="{DynamicResource TextSekundaer}"/>
-                    <TextBlock Text="{Binding Messungen}" FontSize="26" FontWeight="SemiBold"
-                               Foreground="{DynamicResource TextPrimaer}" Margin="0,4,0,0"/>
                 </StackPanel>
             </Border>
         </UniformGrid>
-
-        <!-- Alt kart: trend grafiği -->
-        <Border Grid.Row="2" Style="{StaticResource KarteStil}" Margin="0,16,0,0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <DockPanel Grid.Row="0">
-                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                        <Ellipse Width="8" Height="8" Fill="{DynamicResource Akzent}"
-                                 Margin="0,0,6,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="LIVE" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{DynamicResource Akzent}"/>
-                    </StackPanel>
-                    <TextBlock Text="TEMPERATURVERLAUF" Style="{StaticResource AbschnittTitelStil}"/>
-                </DockPanel>
-
-                <Border Grid.Row="1" Background="{DynamicResource Zelle}" CornerRadius="10"
-                        Margin="0,12,0,0" Padding="16" MinHeight="120">
-                    <Grid>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/>
-                                <RowDefinition/><RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Border Grid.Row="0" Style="{StaticResource GitterLinie}"/>
-                            <Border Grid.Row="1" Style="{StaticResource GitterLinie}"/>
-                            <Border Grid.Row="2" Style="{StaticResource GitterLinie}"/>
-                            <Border Grid.Row="3" Style="{StaticResource GitterLinie}"/>
-                            <Border Grid.Row="4" Style="{StaticResource GitterLinie}"/>
-                            <Border Grid.Row="5" Style="{StaticResource GitterLinie}"/>
-                        </Grid>
-
-                        <Polyline Stroke="{DynamicResource Akzent}" StrokeThickness="2.5"
-                                  StrokeLineJoin="Round" Stretch="Fill"
-                                  Points="{Binding TrendPunkte}">
-                            <Polyline.Effect>
-                                <DropShadowEffect Color="#22D3EE" BlurRadius="8" ShadowDepth="0" Opacity="0.45"/>
-                            </Polyline.Effect>
-                        </Polyline>
-                    </Grid>
-                </Border>
-            </Grid>
-        </Border>
     </Grid>
 </UserControl>

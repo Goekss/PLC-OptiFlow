@@ -1,17 +1,21 @@
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OptiCHmiApp.Services;
 
 namespace OptiCHmiApp.ViewModels;
 
-// ViewModel der Seite "Handbetrieb": manuelle Steuerung einzelner Aktoren.
+// ViewModel der Seite "Handbetrieb": manuelle Steuerung der Maschine.
 // "Handbetrieb" (manuel kontrol) sayfasının ViewModel'i.
 public class HandbetriebViewModel : ObservableObject
 {
+    private readonly IPlcService _plcService;
+    private readonly DispatcherTimer _timer;
+    private bool _synchronisiere;
     private bool _pumpeEin;
     private bool _heizungEin;
-    private bool _ventilEin;
-    private double _motorDrehzahl = 60;
-    private double _sollTemperatur = 45;
+    private double _sollwert = 60.0;
+    private bool _notaus;
 
     public bool PumpeEin
     {
@@ -20,6 +24,11 @@ public class HandbetriebViewModel : ObservableObject
         {
             if (SetProperty(ref _pumpeEin, value))
             {
+                if (!_synchronisiere)
+                {
+                    _ = _plcService.SchreibePumpeAsync(value);
+                }
+
                 OnPropertyChanged(nameof(StatusText));
             }
         }
@@ -32,52 +41,85 @@ public class HandbetriebViewModel : ObservableObject
         {
             if (SetProperty(ref _heizungEin, value))
             {
+                if (!_synchronisiere)
+                {
+                    _ = _plcService.SchreibeHeizungAsync(value);
+                }
+
                 OnPropertyChanged(nameof(StatusText));
             }
         }
     }
 
-    public bool VentilEin
+    public double Sollwert
     {
-        get => _ventilEin;
+        get => _sollwert;
         set
         {
-            if (SetProperty(ref _ventilEin, value))
+            if (SetProperty(ref _sollwert, value))
             {
-                OnPropertyChanged(nameof(StatusText));
+                if (!_synchronisiere)
+                {
+                    _ = _plcService.SchreibeSollwertAsync(value);
+                }
             }
         }
     }
 
-    public double MotorDrehzahl
+    public bool Notaus
     {
-        get => _motorDrehzahl;
-        set => SetProperty(ref _motorDrehzahl, value);
+        get => _notaus;
+        private set
+        {
+            if (SetProperty(ref _notaus, value))
+            {
+                OnPropertyChanged(nameof(StatusText));
+                OnPropertyChanged(nameof(NotausText));
+            }
+        }
     }
 
-    public double SollTemperatur
+    public string StatusText => Notaus
+        ? "NOTAUS"
+        : (PumpeEin || HeizungEin) ? "ANLAGE IN BETRIEB" : "BEREITSCHAFT";
+
+    public string NotausText => Notaus ? "RESET" : "NOT-AUS";
+
+    public IAsyncRelayCommand NotausCommand { get; }
+
+    public HandbetriebViewModel(IPlcService plcService)
     {
-        get => _sollTemperatur;
-        set => SetProperty(ref _sollTemperatur, value);
+        _plcService = plcService;
+        NotausCommand = new AsyncRelayCommand(NotausUmschaltenAsync);
+
+        _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        _timer.Tick += (_, _) => _ = SynchronisiereAsync();
+        _timer.Start();
     }
 
-    public IRelayCommand NotausCommand { get; }
-
-    public string StatusText => (PumpeEin || HeizungEin || VentilEin)
-        ? "ANLAGE IN BETRIEB"
-        : "BEREITSCHAFT";
-
-    public HandbetriebViewModel()
+    private async Task SynchronisiereAsync()
     {
-        NotausCommand = new RelayCommand(Notaus);
+        try
+        {
+            var status = await _plcService.LeseStatusAsync();
+
+            _synchronisiere = true;
+            PumpeEin = status.Pumpe;
+            HeizungEin = status.Heizung;
+            Sollwert = status.Sollwert;
+            Notaus = status.Notaus;
+            _synchronisiere = false;
+        }
+        catch
+        {
+            // Verbindungsfehler: nächster Versuch folgt.
+        }
     }
 
-    private void Notaus()
+    private async Task NotausUmschaltenAsync()
     {
-        PumpeEin = false;
-        HeizungEin = false;
-        VentilEin = false;
-        MotorDrehzahl = 0;
-        SollTemperatur = 0;
+        var neu = !Notaus;
+        await _plcService.NotausAsync(neu);
+        Notaus = neu;
     }
 }

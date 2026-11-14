@@ -45,8 +45,8 @@ public class HauptViewModel : ObservableObject
         Menue = new List<MenueEintrag>
         {
             new("Übersicht", new UebersichtViewModel(plcService)),
-            new("Alarme", new AlarmViewModel()),
-            new("Handbetrieb", new HandbetriebViewModel()),
+            new("Alarme", new AlarmViewModel(plcService)),
+            new("Handbetrieb", new HandbetriebViewModel(plcService)),
             new("Einstellungen", new EinstellungenViewModel())
         };
 

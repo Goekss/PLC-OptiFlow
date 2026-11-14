@@ -4,6 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddGrpc();
+// Singleton, damit der Kesselzustand zwischen den gRPC-Aufrufen erhalten bleibt.
+// gRPC çağrıları arasında kazan durumu korunsun diye singleton.
+builder.Services.AddSingleton<PlcService>();
 
 var app = builder.Build();
 

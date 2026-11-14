@@ -7,18 +7,76 @@ package plc;
 // Service zum Lesen von Daten aus der PLC.
 // PLC'den veri okumak için servis.
 service Plc {
-  // Liest den aktuellen Temperaturwert.
-  // Güncel sıcaklık değerini okur.
-  rpc LeseTemperatur (LeseTemperaturRequest) returns (LeseTemperaturReply);
+  // Liest den vollständigen Maschinenzustand.
+  // Makinenin tam durumunu okur.
+  rpc LeseStatus (LeseStatusRequest) returns (LeseStatusReply);
+
+  // Setzt den Sollwert.
+  // Hedef sıcaklığı ayarlar.
+  rpc SchreibeSollwert (SchreibeSollwertRequest) returns (SchreibeSollwertReply);
+
+  // Schaltet die Heizung ein/aus.
+  // Isıtıcıyı açar/kapatır.
+  rpc SchreibeHeizung (SchreibeHeizungRequest) returns (SchreibeHeizungReply);
+
+  // Schaltet die Pumpe ein/aus.
+  // Pompayı açar/kapatır.
+  rpc SchreibePumpe (SchreibePumpeRequest) returns (SchreibePumpeReply);
+
+  // Löst den Notaus aus.
+  // Acil durdurmayı tetikler.
+  rpc Notaus (NotausRequest) returns (NotausReply);
 }
 
-// Anfrage-Nachricht (aktuell leer).
-// İstek mesajı (şimdilik boş).
-message LeseTemperaturRequest {
+// Anfrage: vollständiger Zustand.
+// İstek: tam durum.
+message LeseStatusRequest {
 }
 
-// Antwort-Nachricht: enthält den Temperaturwert.
-// Yanıt mesajı: sıcaklık değerini içerir.
-message LeseTemperaturReply {
-  int32 temperatur = 1;
+// Antwort: vollständiger Maschinenzustand.
+// Yanıt: tam makine durumu.
+message LeseStatusReply {
+  double temperatur = 1;
+  bool heizung = 2;
+  bool pumpe = 3;
+  double sollwert = 4;
+  bool notaus = 5;
+  double zielAlarmSekunden = 6;
+  bool autoGestoppt = 7;
+}
+
+// Anfrage: Sollwert setzen.
+// İstek: hedef değer ayarla.
+message SchreibeSollwertRequest {
+  double sollwert = 1;
+}
+
+message SchreibeSollwertReply {
+}
+
+// Anfrage: Heizung ein/aus.
+// İstek: ısıtıcı aç/kapat.
+message SchreibeHeizungRequest {
+  bool ein = 1;
+}
+
+message SchreibeHeizungReply {
+}
+
+// Anfrage: Pumpe ein/aus.
+// İstek: pompa aç/kapat.
+message SchreibePumpeRequest {
+  bool ein = 1;
+}
+
+message SchreibePumpeReply {
+}
+
+// Anfrage: Notaus auslösen (ein=true) oder zurücksetzen (ein=false).
+// İstek: acil durdurma tetikle (ein=true) veya sıfırla (ein=false).
+message NotausRequest {
+  bool ein = 1;
+}
+
+message NotausReply {
 }

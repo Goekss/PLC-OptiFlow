@@ -8,8 +8,15 @@ public class UebersichtViewModelTests
 {
     private sealed class KonstanterPlcService : IPlcService
     {
-        public Task<int> LeseTemperaturAsync()
-            => Task.FromResult(42);
+        public bool IstSimulation => false;
+
+        public Task<PlcStatus> LeseStatusAsync()
+            => Task.FromResult(new PlcStatus(42.0, false, true, 60.0, false, 0.0, false));
+
+        public Task SchreibeSollwertAsync(double sollwert) => Task.CompletedTask;
+        public Task SchreibeHeizungAsync(bool ein) => Task.CompletedTask;
+        public Task SchreibePumpeAsync(bool ein) => Task.CompletedTask;
+        public Task NotausAsync(bool ein) => Task.CompletedTask;
     }
 
     [Fact]
@@ -22,7 +29,7 @@ public class UebersichtViewModelTests
         await Task.Delay(650);
 
         Assert.True(viewModel.Laeuft);
-        Assert.Equal(42, viewModel.Temperatur);
+        Assert.Equal(42.0, viewModel.Temperatur);
 
         await viewModel.StartStoppCommand.ExecuteAsync(null);
         await startTask;

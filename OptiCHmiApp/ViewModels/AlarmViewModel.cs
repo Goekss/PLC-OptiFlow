@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OptiCHmiApp.Services;
 
 namespace OptiCHmiApp.ViewModels;
 
@@ -17,6 +19,7 @@ public class AlarmEintrag : ObservableObject
 {
     private bool _istQuittiert;
 
+    public string Id { get; }
     public string Zeit { get; }
     public string Meldung { get; }
     public string Bereich { get; }
@@ -28,8 +31,9 @@ public class AlarmEintrag : ObservableObject
         set => SetProperty(ref _istQuittiert, value);
     }
 
-    public AlarmEintrag(string zeit, string meldung, string bereich, AlarmSchweregrad schweregrad)
+    public AlarmEintrag(string id, string zeit, string meldung, string bereich, AlarmSchweregrad schweregrad)
     {
+        Id = id;
         Zeit = zeit;
         Meldung = meldung;
         Bereich = bereich;
@@ -37,9 +41,13 @@ public class AlarmEintrag : ObservableObject
     }
 }
 
-// ViewModel der Seite "Alarme".
+// ViewModel der Seite "Alarme": leitet aktive Alarme aus dem Maschinenzustand ab.
+// "Alarme" sayfasının ViewModel'i: aktif alarmları makine durumundan türetir.
 public class AlarmViewModel : ObservableObject
 {
+    private readonly IPlcService _plcService;
+    private readonly DispatcherTimer _timer;
+
     public ObservableCollection<AlarmEintrag> Alarme { get; } = new();
 
     public IRelayCommand QuittierenCommand { get; }
@@ -47,16 +55,72 @@ public class AlarmViewModel : ObservableObject
 
     public int AktiveAnzahl => Alarme.Count(a => !a.IstQuittiert);
 
-    public AlarmViewModel()
+    public AlarmViewModel(IPlcService plcService)
     {
+        _plcService = plcService;
+
         QuittierenCommand = new RelayCommand<AlarmEintrag>(Quittieren);
         AlleQuittierenCommand = new RelayCommand(AlleQuittieren);
 
-        Alarme.Add(new AlarmEintrag("12:04:12", "Kühlmitteltemperatur zu hoch", "Kühlkreis 1", AlarmSchweregrad.Kritisch));
-        Alarme.Add(new AlarmEintrag("11:58:47", "Pumpendruck unter Sollwert", "Kühlmittelpumpe", AlarmSchweregrad.Warnung));
-        Alarme.Add(new AlarmEintrag("11:32:03", "Ventilstellung nicht erreicht", "Ventil V-02", AlarmSchweregrad.Warnung));
-        Alarme.Add(new AlarmEintrag("10:15:29", "Wartungsintervall erreicht", "Antrieb M-01", AlarmSchweregrad.Info));
-        Alarme.Add(new AlarmEintrag("09:41:55", "Sensorabweichung erkannt", "Temperatursensor T-01", AlarmSchweregrad.Info));
+        _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        _timer.Tick += (_, _) => _ = AktualisiereAsync();
+        _timer.Start();
+    }
+
+    private async Task AktualisiereAsync()
+    {
+        try
+        {
+            var status = await _plcService.LeseStatusAsync();
+            Aktualisiere(status);
+        }
+        catch
+        {
+            // Verbindungsfehler: nichts tun, nächster Versuch folgt.
+        }
+    }
+
+    private void Aktualisiere(PlcStatus status)
+    {
+        var jetzt = DateTime.Now.ToString("HH:mm:ss");
+        var gewuenscht = new List<AlarmEintrag>();
+
+        if (status.Temperatur >= 90.0)
+        {
+            gewuenscht.Add(new AlarmEintrag("temp_kritisch", jetzt, "Temperatur kritisch hoch", "Kessel", AlarmSchweregrad.Kritisch));
+        }
+        else if (status.Temperatur >= 80.0)
+        {
+            gewuenscht.Add(new AlarmEintrag("temp_warnung", jetzt, "Temperatur zu hoch", "Kessel", AlarmSchweregrad.Warnung));
+        }
+
+        if (status.ZielAlarmSekunden > 0)
+        {
+            gewuenscht.Add(new AlarmEintrag("ziel", jetzt, "Sollwert erreicht", "Kessel", AlarmSchweregrad.Warnung));
+        }
+
+        if (_plcService.IstSimulation)
+        {
+            gewuenscht.Add(new AlarmEintrag("verbindung", jetzt, "Verbindung getrennt (Simulation)", "Kommunikation", AlarmSchweregrad.Warnung));
+        }
+
+        foreach (var vorhanden in Alarme.ToList())
+        {
+            if (!gewuenscht.Any(g => g.Id == vorhanden.Id))
+            {
+                Alarme.Remove(vorhanden);
+            }
+        }
+
+        foreach (var neu in gewuenscht)
+        {
+            if (!Alarme.Any(a => a.Id == neu.Id))
+            {
+                Alarme.Add(neu);
+            }
+        }
+
+        OnPropertyChanged(nameof(AktiveAnzahl));
     }
 
     private void Quittieren(AlarmEintrag? alarm)
@@ -64,6 +128,13 @@ public class AlarmViewModel : ObservableObject
         if (alarm is null)
         {
             return;
+        }
+
+        if (alarm.Id == "ziel")
+        {
+            // Manuelles Abschalten der Heizung hebt den Ziel-Alarm auf.
+            // Isıtıcıyı manuel kapatmak hedef alarmını iptal eder.
+            _ = _plcService.SchreibeHeizungAsync(false);
         }
 
         alarm.IstQuittiert = true;

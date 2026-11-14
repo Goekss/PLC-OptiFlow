@@ -10,7 +10,10 @@
                 <Ellipse.Stroke>
                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                         <GradientStop Color="#2ECC71" Offset="0"/>
-                        <GradientStop Color="#F1C40F" Offset="0.5"/>
+                        <GradientStop Color="#2ECC71" Offset="0.8"/>
+                        <GradientStop Color="#F1C40F" Offset="0.8"/>
+                        <GradientStop Color="#F1C40F" Offset="0.9"/>
+                        <GradientStop Color="#E74C3C" Offset="0.9"/>
                         <GradientStop Color="#E74C3C" Offset="1"/>
                     </LinearGradientBrush>
                 </Ellipse.Stroke>
@@ -45,7 +48,7 @@
             <!-- Değer -->
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,44">
-                <TextBlock Text="{Binding Wert, ElementName=Wurzel}" FontSize="22" FontWeight="Bold"
+                <TextBlock Text="{Binding Wert, ElementName=Wurzel, StringFormat={}{0:F0}}" FontSize="22" FontWeight="Bold"
                            Foreground="{DynamicResource TextPrimaer}"/>
                 <TextBlock Text="°C" FontSize="13" Foreground="{DynamicResource TextSekundaer}"
                            VerticalAlignment="Bottom" Margin="3,0,0,4"/>

@@ -10,7 +10,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        IPlcService plcService = new GrpcPlcService(BenutzerEinstellungen.BackendAdresse);
+        IPlcService plcService = new FallbackPlcService(BenutzerEinstellungen.BackendAdresse);
         DataContext = new HauptViewModel(plcService);
     }
 }
