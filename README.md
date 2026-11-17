@@ -84,6 +84,7 @@ dotnet test OptiCHmiApp.Tests
 - Instrumente und Diagramme sind mit WPF-Mitteln gezeichnet (noch keine Chart-Bibliothek)
 - Vorhanden: TwinCAT 3.1 (OOP-PLC, siehe Plc/), ADS-Anbindung, OPC-UA-Server (Demo)
 - Geplant: SignalR + React, OxyPlot/LiveCharts2
+- PLC-Code und OPC-UA-Server: implementiert, noch nicht mit TwinCAT-Runtime bzw. OPC-UA-Client getestet.
 
 ### Lizenz und Voraussetzungen
 - TwinCAT 3.1 XAE (Programmierung) ist kostenlos; für die Runtime gibt es eine kostenlose, alle 7 Tage erneuerbare Trial-Lizenz.
@@ -151,6 +152,7 @@ dotnet test OptiCHmiApp.Tests
 - Instruments and charts are drawn with plain WPF (no chart library yet)
 - Present: TwinCAT 3.1 (OOP PLC, see Plc/), ADS link, OPC UA server (demo)
 - Planned: SignalR + React, OxyPlot/LiveCharts2
+- PLC code and OPC UA server: implemented, not yet tested against a TwinCAT runtime or an OPC UA client.
 
 ### License and requirements
 - TwinCAT 3.1 XAE (engineering) is free; the runtime uses a free 7-day renewable trial license.
@@ -218,6 +220,7 @@ dotnet test OptiCHmiApp.Tests
 - Göstergeler ve grafikler WPF çizimleriyle yapıldı (henüz grafik kütüphanesi yok)
 - Mevcut: TwinCAT 3.1 (OOP PLC, bkz. Plc/), ADS bağlantısı, OPC UA server (demo)
 - Planlanan: SignalR + React, OxyPlot/LiveCharts2
+- PLC kodu ve OPC UA server: uygulandı, henüz TwinCAT runtime veya OPC UA istemcisiyle test edilmedi.
 
 ### Lisans ve gereksinimler
 - TwinCAT 3.1 XAE (programlama) ücretsizdir; runtime için 7 günde bir yenilenebilen ücretsiz trial lisansı vardır.
