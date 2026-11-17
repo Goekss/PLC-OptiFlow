@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectGuid>{2A1B7C3D-4E5F-4A6B-8C7D-9E0F1A2B3C4D}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <Name>PlcKessel</Name>
+    <Version>1.0.0.0</Version>
+    <Title>PlcKessel</Title>
+    <TargetNetId>127.0.0.1.1.1</TargetNetId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="DUTs\E_Zustand.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\I_Maschine.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_Maschine.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\FB_Kessel.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\GVL.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

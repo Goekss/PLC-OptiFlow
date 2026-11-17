@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.32">
+  <DUT Name="E_Zustand" Id="{08D95A1B-2C3D-4849-6A5B-D6E7F8091A2B}">
+    <Declaration><![CDATA[TYPE E_Zustand :
+(
+	Aus := 0,
+	Bereit := 1,
+	Heizen := 2,
+	Warnung := 3,
+	Kritisch := 4,
+	Notaus := 5
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

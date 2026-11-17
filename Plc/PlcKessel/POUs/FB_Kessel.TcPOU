@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.32">
+  <POU Name="FB_Kessel" Id="{4C3D9E5F-6071-4C8D-AE9F-1A2B3C4D5E6F}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Kessel EXTENDS FB_Maschine
+VAR CONSTANT
+	WarnSchwelle : LREAL := 80.0;
+	KritischSchwelle : LREAL := 90.0;
+	UmgebungsTemperatur : LREAL := 20.0;
+	HeizrateProSekunde : LREAL := 0.5;
+	KuehlrateProSekunde : LREAL := 0.25;
+	Jitter : LREAL := 0.3;
+	Hysterese : LREAL := 0.5;
+END_VAR
+VAR
+	_temperatur : LREAL := 20.0;
+	_heizung : BOOL;
+	_pumpe : BOOL := TRUE;
+	_sollwert : LREAL := 60.0;
+	_zielAlarmSekunden : LREAL;
+	_autoGestoppt : BOOL;
+	_automatik : BOOL := TRUE;
+	_zufallSeed : UDINT := 12345;
+	_gestartet : BOOL;
+	_cmdHeizungAlt : BOOL;
+	_cmdPumpeAlt : BOOL := TRUE;
+	_cmdSollwertAlt : LREAL := 60.0;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Einmaliger Selbststart beim ersten Zyklus (Start/Stop bleiben als OOP-Methoden verfügbar).
+IF NOT _gestartet THEN
+	Start();
+	_gestartet := TRUE;
+END_IF
+
+VerarbeiteBefehle();
+Aktualisiere(0.1);
+SchreibeZustand();
+]]></ST>
+    </Implementation>
+    <Method Name="NotausAusloesen" Id="{A2E594B6-C7D8-43E4-F560-718293A4B5C6}">
+      <Declaration><![CDATA[METHOD NotausAusloesen
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.NotausAusloesen();
+_heizung := FALSE;
+_pumpe := FALSE;
+_zielAlarmSekunden := 0.0;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NotausZuruecksetzen" Id="{B3F6A5C7-D8E9-44F5-0671-8293A4B5C6D7}">
+      <Declaration><![CDATA[METHOD NotausZuruecksetzen
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.NotausZuruecksetzen();
+_automatik := TRUE;
+_autoGestoppt := FALSE;
+_zielAlarmSekunden := 0.0;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="VerarbeiteBefehle" Id="{C407B6D8-E9F0-4506-1782-93A4B5C6D7E8}">
+      <Declaration><![CDATA[METHOD PRIVATE VerarbeiteBefehle
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Notaus / Reset werden als Impuls konsumiert.
+IF GVL.CmdNotaus THEN
+	NotausAusloesen();
+	GVL.CmdNotaus := FALSE;
+END_IF
+
+IF GVL.CmdNotausReset THEN
+	NotausZuruecksetzen();
+	GVL.CmdNotausReset := FALSE;
+END_IF
+
+// Alle anderen Befehle nur, wenn nicht verriegelt.
+IF NOT _notaus THEN
+	// Sollwert (Pegel, mit Klemmung 0..100 °C)
+	IF GVL.CmdSollwert <> _cmdSollwertAlt THEN
+		_cmdSollwertAlt := GVL.CmdSollwert;
+		_sollwert := LIMIT(0.0, GVL.CmdSollwert, 100.0);
+		_autoGestoppt := FALSE;
+	END_IF
+
+	// Heizung (manuell, Flanke)
+	IF GVL.CmdHeizung <> _cmdHeizungAlt THEN
+		_cmdHeizungAlt := GVL.CmdHeizung;
+		_heizung := GVL.CmdHeizung;
+		_automatik := FALSE;
+		IF GVL.CmdHeizung THEN
+			_autoGestoppt := FALSE;
+		END_IF
+	END_IF
+
+	// Pumpe (manuell, Flanke)
+	IF GVL.CmdPumpe <> _cmdPumpeAlt THEN
+		_cmdPumpeAlt := GVL.CmdPumpe;
+		_pumpe := GVL.CmdPumpe;
+	END_IF
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Aktualisiere" Id="{D518C7E9-F001-4617-2893-A4B5C6D7E8F9}">
+      <Declaration><![CDATA[METHOD PRIVATE Aktualisiere
+VAR_INPUT
+	sekunden : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _zustand = E_Zustand.Aus THEN
+	RETURN;
+END_IF
+
+sekunden := LIMIT(0.0, sekunden, 1.0);
+
+IF _notaus THEN
+	_heizung := FALSE;
+	_pumpe := FALSE;
+	_zielAlarmSekunden := 0.0;
+	_temperatur := Annaehern(_temperatur, UmgebungsTemperatur, KuehlrateProSekunde * sekunden);
+ELSE
+	IF _automatik THEN
+		IF _heizung AND (_temperatur >= _sollwert + Hysterese) THEN
+			_heizung := FALSE;
+		ELSIF (NOT _heizung) AND (_temperatur < _sollwert - Hysterese) THEN
+			_heizung := TRUE;
+		END_IF
+	END_IF
+
+	IF _heizung THEN
+		_temperatur := _temperatur + HeizrateProSekunde * sekunden;
+	ELSE
+		_temperatur := Annaehern(_temperatur, UmgebungsTemperatur, KuehlrateProSekunde * sekunden);
+	END_IF
+
+	// Kritisch: ab 90 °C wird die Heizung automatisch abgeschaltet.
+	IF _temperatur >= KritischSchwelle THEN
+		_heizung := FALSE;
+	END_IF
+
+	// Ziel erreicht: Alarm + Countdown, danach automatische Abschaltung.
+	IF _heizung AND (_temperatur >= _sollwert) AND (_zielAlarmSekunden <= 0.0) THEN
+		_zielAlarmSekunden := 5.0;
+	END_IF
+
+	IF _zielAlarmSekunden > 0.0 THEN
+		IF (NOT _automatik) AND (NOT _heizung) THEN
+			_zielAlarmSekunden := 0.0;
+		ELSE
+			_zielAlarmSekunden := _zielAlarmSekunden - sekunden;
+			IF _zielAlarmSekunden <= 0.0 THEN
+				_zielAlarmSekunden := 0.0;
+				_heizung := FALSE;
+				_automatik := FALSE;
+				_autoGestoppt := TRUE;
+			END_IF
+		END_IF
+	END_IF
+END_IF
+
+// Rauschanteil (±Jitter) und Grenzbereich.
+_temperatur := _temperatur + Zufall() * Jitter * sekunden;
+_temperatur := LIMIT(10.0, _temperatur, 120.0);
+
+// Zustand ableiten.
+IF _notaus THEN
+	_zustand := E_Zustand.Notaus;
+ELSIF _temperatur >= KritischSchwelle THEN
+	_zustand := E_Zustand.Kritisch;
+ELSIF _temperatur >= WarnSchwelle THEN
+	_zustand := E_Zustand.Warnung;
+ELSIF _heizung THEN
+	_zustand := E_Zustand.Heizen;
+ELSE
+	_zustand := E_Zustand.Bereit;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SchreibeZustand" Id="{E629D8F0-0112-4728-39A4-B5C6D7E8F90A}">
+      <Declaration><![CDATA[METHOD PRIVATE SchreibeZustand
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Durum değişkenleri yalnızca PLC tarafından yazılır; ADS sadece okur.
+GVL.Temperatur := _temperatur;
+GVL.Heizung := _heizung;
+GVL.Pumpe := _pumpe;
+GVL.Sollwert := _sollwert;
+GVL.Notaus := _notaus;
+GVL.ZielAlarmSekunden := _zielAlarmSekunden;
+GVL.AutoGestoppt := _autoGestoppt;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Annaehern" Id="{F73AE901-1223-4839-4AB5-C6D7E8F90A1B}">
+      <Declaration><![CDATA[METHOD PRIVATE Annaehern : LREAL
+VAR_INPUT
+	aktuell : LREAL;
+	ziel : LREAL;
+	schritt : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF aktuell < ziel THEN
+	Annaehern := MIN(ziel, aktuell + schritt);
+ELSIF aktuell > ziel THEN
+	Annaehern := MAX(ziel, aktuell - schritt);
+ELSE
+	Annaehern := aktuell;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Zufall" Id="{084BF012-2334-494A-5BC6-D7E8F90A1B2C}">
+      <Declaration><![CDATA[METHOD PRIVATE Zufall : LREAL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Einfacher linearer Kongruenzgenerator: Wert in [-1, 1).
+_zufallSeed := (_zufallSeed * 1664525) + 1013904223;
+Zufall := (UDINT_TO_LREAL(_zufallSeed) / 2147483648.0) - 1.0;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Temperatur" Id="{195CF123-3445-4A5B-6CD7-E8F90A1B2C3D}">
+      <Declaration><![CDATA[PROPERTY Temperatur : LREAL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Temperatur := _temperatur;
+]]></ST>
+      </Implementation>
+    </Property>
+  </POU>
+</TcPlcObject>

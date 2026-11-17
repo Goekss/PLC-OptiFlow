@@ -6,6 +6,9 @@
 # dotenv files
 .env
 
+# OPC UA certificates (generated at runtime by KesselOpcUaServer)
+pki/
+
 # User-specific files
 *.rsuser
 *.suo

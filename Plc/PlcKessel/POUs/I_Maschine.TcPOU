@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.32">
+  <POU Name="I_Maschine" Id="{E6B738F9-0A1B-4627-4839-B4C5D6E7F809}" SpecialFunc="None">
+    <Declaration><![CDATA[INTERFACE I_Maschine
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Start" Id="{195C0B2D-3E4F-4A5B-6C7D-8E9F0A1B2C3D}">
+      <Declaration><![CDATA[METHOD Start
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{2A6D1C3E-4F50-4B6C-7D8E-9F0A1B2C3D4E}">
+      <Declaration><![CDATA[METHOD Stop
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NotausAusloesen" Id="{3B7E2D4F-5061-4C7D-8E9F-0A1B2C3D4E5F}">
+      <Declaration><![CDATA[METHOD NotausAusloesen
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NotausZuruecksetzen" Id="{4C8F3E50-6172-4D8E-9F0A-1B2C3D4E5F60}">
+      <Declaration><![CDATA[METHOD NotausZuruecksetzen
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

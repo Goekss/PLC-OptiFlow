@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.32">
+  <POU Name="FB_Maschine" Id="{F7C8490A-1B2C-4738-594A-C5D6E7F8091A}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Maschine IMPLEMENTS I_Maschine
+VAR
+	_zustand : E_Zustand := E_Zustand.Aus;
+	_notaus : BOOL := FALSE;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Start" Id="{5D904F61-7283-4E9F-A01B-2C3D4E5F6071}">
+      <Declaration><![CDATA[METHOD Start
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT _notaus THEN
+	_zustand := E_Zustand.Bereit;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{6EA15072-8394-4FA0-B12C-3D4E5F607182}">
+      <Declaration><![CDATA[METHOD Stop
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_zustand := E_Zustand.Aus;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NotausAusloesen" Id="{7FB26183-94A5-40B1-C23D-4E5F60718293}">
+      <Declaration><![CDATA[METHOD NotausAusloesen
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_notaus := TRUE;
+_zustand := E_Zustand.Notaus;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="NotausZuruecksetzen" Id="{80C37294-A5B6-41C2-D34E-5F60718293A4}">
+      <Declaration><![CDATA[METHOD NotausZuruecksetzen
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_notaus := FALSE;
+_zustand := E_Zustand.Bereit;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Zustand" Id="{91D483A5-B6C7-42D3-E45F-60718293A4B5}">
+      <Declaration><![CDATA[PROPERTY Zustand : E_Zustand
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Zustand := _zustand;
+]]></ST>
+      </Implementation>
+    </Property>
+  </POU>
+</TcPlcObject>

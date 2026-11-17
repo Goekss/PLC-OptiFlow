@@ -82,7 +82,13 @@ dotnet test OptiCHmiApp.Tests
 - Keine echte Steuerung: Simulation im Backend und als Client-Fallback
 - Nur Windows (WPF)
 - Instrumente und Diagramme sind mit WPF-Mitteln gezeichnet (noch keine Chart-Bibliothek)
-- Geplant: TwinCAT 3 ADS, SignalR + React, OxyPlot/LiveCharts2
+- Vorhanden: TwinCAT 3.1 (OOP-PLC, siehe Plc/), ADS-Anbindung, OPC-UA-Server (Demo)
+- Geplant: SignalR + React, OxyPlot/LiveCharts2
+
+### Lizenz und Voraussetzungen
+- TwinCAT 3.1 XAE (Programmierung) ist kostenlos; für die Runtime gibt es eine kostenlose, alle 7 Tage erneuerbare Trial-Lizenz.
+- ADS-Port 851, lokale AMS Net ID standardmäßig `127.0.0.1.1.1`.
+- Der OPC-UA-Server läuft im Backend (Port 4840); TF6100 wird nicht benötigt.
 
 ### Dokumentation
 - [Projekt_Regeln.md](Projekt_Regeln.md) – Scope, Regeln und Definition of Done
@@ -143,7 +149,13 @@ dotnet test OptiCHmiApp.Tests
 - No real controller: simulation in the backend and as a client fallback
 - Windows only (WPF)
 - Instruments and charts are drawn with plain WPF (no chart library yet)
-- Planned: TwinCAT 3 ADS, SignalR + React, OxyPlot/LiveCharts2
+- Present: TwinCAT 3.1 (OOP PLC, see Plc/), ADS link, OPC UA server (demo)
+- Planned: SignalR + React, OxyPlot/LiveCharts2
+
+### License and requirements
+- TwinCAT 3.1 XAE (engineering) is free; the runtime uses a free 7-day renewable trial license.
+- ADS port 851, local AMS Net ID defaults to `127.0.0.1.1.1`.
+- The OPC UA server runs inside the backend (port 4840); TF6100 is not required.
 
 ### Documentation
 - [Projekt_Regeln.md](Projekt_Regeln.md) – scope, rules and definition of done
@@ -204,7 +216,13 @@ dotnet test OptiCHmiApp.Tests
 - Gerçek kontrolör yok: backend'de simülasyon, istemcide yedek simülasyon
 - Yalnızca Windows (WPF)
 - Göstergeler ve grafikler WPF çizimleriyle yapıldı (henüz grafik kütüphanesi yok)
-- Planlanan: TwinCAT 3 ADS, SignalR + React, OxyPlot/LiveCharts2
+- Mevcut: TwinCAT 3.1 (OOP PLC, bkz. Plc/), ADS bağlantısı, OPC UA server (demo)
+- Planlanan: SignalR + React, OxyPlot/LiveCharts2
+
+### Lisans ve gereksinimler
+- TwinCAT 3.1 XAE (programlama) ücretsizdir; runtime için 7 günde bir yenilenebilen ücretsiz trial lisansı vardır.
+- ADS portu 851, yerel AMS Net ID varsayılan `127.0.0.1.1.1`.
+- OPC UA server backend'in içinde çalışır (port 4840); TF6100 gerekmez.
 
 ### Belgeler
 - [Projekt_Regeln.md](Projekt_Regeln.md) – kapsam, kurallar ve tamamlanma kriterleri

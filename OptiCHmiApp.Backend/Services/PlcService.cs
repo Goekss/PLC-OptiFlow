@@ -7,78 +7,112 @@ namespace OptiCHmiApp.Backend.Services;
 public class PlcService : Plc.PlcBase
 {
     private readonly object _sync = new();
-    private readonly KesselPhysik _kessel = new();
-    private DateTime _letzteAktualisierung = DateTime.UtcNow;
+    private readonly IKesselQuelle _quelle;
+
+    public PlcService(IKesselQuelle quelle)
+    {
+        _quelle = quelle;
+    }
 
     public override Task<LeseStatusReply> LeseStatus(LeseStatusRequest request, ServerCallContext context)
     {
-        LeseStatusReply antwort;
-        lock (_sync)
+        KesselZustand zustand;
+        try
         {
-            var jetzt = DateTime.UtcNow;
-            var dt = (jetzt - _letzteAktualisierung).TotalSeconds;
-            _letzteAktualisierung = jetzt;
-            _kessel.Tick(dt);
-
-            antwort = new LeseStatusReply
+            lock (_sync)
             {
-                Temperatur = _kessel.Temperatur,
-                Heizung = _kessel.Heizung,
-                Pumpe = _kessel.Pumpe,
-                Sollwert = _kessel.Sollwert,
-                Notaus = _kessel.Notaus,
-                ZielAlarmSekunden = _kessel.ZielAlarmSekunden,
-                AutoGestoppt = _kessel.AutoGestoppt
-            };
+                zustand = _quelle.LeseZustand();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new RpcException(new Status(StatusCode.Unavailable, ex.Message));
         }
 
-        return Task.FromResult(antwort);
+        return Task.FromResult(new LeseStatusReply
+        {
+            Temperatur = zustand.Temperatur,
+            Heizung = zustand.Heizung,
+            Pumpe = zustand.Pumpe,
+            Sollwert = zustand.Sollwert,
+            Notaus = zustand.Notaus,
+            ZielAlarmSekunden = zustand.ZielAlarmSekunden,
+            AutoGestoppt = zustand.AutoGestoppt
+        });
     }
 
     public override Task<SchreibeSollwertReply> SchreibeSollwert(SchreibeSollwertRequest request, ServerCallContext context)
     {
-        lock (_sync)
+        try
         {
-            _kessel.SchreibeSollwert(request.Sollwert);
-        }
+            lock (_sync)
+            {
+                _quelle.SchreibeSollwert(request.Sollwert);
+            }
 
-        return Task.FromResult(new SchreibeSollwertReply());
+            return Task.FromResult(new SchreibeSollwertReply());
+        }
+        catch (Exception ex)
+        {
+            throw new RpcException(new Status(StatusCode.Unavailable, ex.Message));
+        }
     }
 
     public override Task<SchreibeHeizungReply> SchreibeHeizung(SchreibeHeizungRequest request, ServerCallContext context)
     {
-        lock (_sync)
+        try
         {
-            _kessel.SchreibeHeizung(request.Ein);
-        }
+            lock (_sync)
+            {
+                _quelle.SchreibeHeizung(request.Ein);
+            }
 
-        return Task.FromResult(new SchreibeHeizungReply());
+            return Task.FromResult(new SchreibeHeizungReply());
+        }
+        catch (Exception ex)
+        {
+            throw new RpcException(new Status(StatusCode.Unavailable, ex.Message));
+        }
     }
 
     public override Task<SchreibePumpeReply> SchreibePumpe(SchreibePumpeRequest request, ServerCallContext context)
     {
-        lock (_sync)
+        try
         {
-            _kessel.SchreibePumpe(request.Ein);
-        }
+            lock (_sync)
+            {
+                _quelle.SchreibePumpe(request.Ein);
+            }
 
-        return Task.FromResult(new SchreibePumpeReply());
+            return Task.FromResult(new SchreibePumpeReply());
+        }
+        catch (Exception ex)
+        {
+            throw new RpcException(new Status(StatusCode.Unavailable, ex.Message));
+        }
     }
 
     public override Task<NotausReply> Notaus(NotausRequest request, ServerCallContext context)
     {
-        lock (_sync)
+        try
         {
-            if (request.Ein)
+            lock (_sync)
             {
-                _kessel.NotausAusloesen();
+                if (request.Ein)
+                {
+                    _quelle.NotausAusloesen();
+                }
+                else
+                {
+                    _quelle.NotausZuruecksetzen();
+                }
             }
-            else
-            {
-                _kessel.NotausZuruecksetzen();
-            }
-        }
 
-        return Task.FromResult(new NotausReply());
+            return Task.FromResult(new NotausReply());
+        }
+        catch (Exception ex)
+        {
+            throw new RpcException(new Status(StatusCode.Unavailable, ex.Message));
+        }
     }
 }

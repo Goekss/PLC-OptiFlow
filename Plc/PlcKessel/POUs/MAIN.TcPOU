@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.32">
+  <POU Name="MAIN" Id="{3B2C8D4E-5F60-4B7C-9D8E-0F1A2B3C4D5E}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	fbKessel : FB_Kessel;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Ein Aufruf pro Task-Zyklus (Zykluszeit z. B. 100 ms).
+fbKessel();
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
